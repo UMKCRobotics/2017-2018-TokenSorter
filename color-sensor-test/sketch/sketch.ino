@@ -29,23 +29,23 @@ int blueMax = 130;
 const int color_size = 7;
 const int diff_constraint = 45;
 String color_names[color_size] = {
-  "Orange",
-  "Yellow",
   "Red",
   "Green",
   "Blue",
-  "Purple",
+  "Yellow",
+  "Magenta",
+  "Cyan",
   "Gray"
 };
 
 int colors[color_size][3] = {
-  {220,53,2},
-  {154,140,2},
-  {249,11,31},
-  {50,217,98},
-  {10,153,235},
-  {109,79,160},
-  {95,133,110}
+  {255,19,39},
+  {70,187,99},
+  {21,144,255},
+  {133,155,28},
+  {180,76,130},
+  {43,175,153},
+  {91,138,116}
 };
 
 void setup(void) {
