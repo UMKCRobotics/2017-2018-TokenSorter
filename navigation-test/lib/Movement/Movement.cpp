@@ -43,11 +43,20 @@ void Movement::performApproach(Approach approachType) {
 		case FollowUntilPerpendicularLine:
 			approachFollowUntilPerpendicularLine();
 			break;
-		case FollowUntilPerpendicularLineOnLeft:
-			approachFollowUntilPerpendicularLineOnLeft();
+		case FollowUntilTokenSlot:
+			approachFollowUntilTokenSlot();
 			break;
-		case FollowUntilPerpendicularLineOnRight:
-			approachFollowUntilPerpendicularLineOnRight();
+		case FollowOnLeftUntilPerpendicularLine:
+			approachFollowOnLeftUntilPerpendicularLine();
+			break;
+		case FollowOnRightUntilPerpendicularLine:
+			approachFollowOnRightUntilPerpendicularLine();
+			break;
+		case FollowOnLeftUntilCrossesLine:
+			approachFollowOnLeftUntilCrossesLine();
+			break;
+		case FollowOnRightUntilCrossesLine:
+			approachFollowOnRightUntilCrossesLine();
 			break;
 		case FollowUntilCrossingY:
 			approachFollowUntilCrossingY();
