@@ -1,4 +1,12 @@
 #include "Navigation.h"
+#include "Movement.h"
+
+
+
+
+
+Movement robotMovement = Movement();
+
 
 
 // input parsing
