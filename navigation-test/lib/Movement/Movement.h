@@ -9,7 +9,7 @@ namespace moveOptions {
 	enum Approach { NoFollowUntilPerpendicularLine, FollowUntilPerpendicularLine, FollowUntilTokenSlot,
 					FollowOnLeftUntilPerpendicularLine, FollowOnRightUntilPerpendicularLine,
 					FollowOnLeftUntilCrossesLine, FollowOnRightUntilCrossesLine,
-					FollowUntilCrossingY, FollowUntilSeparatingY };
+					FollowUntilCrossingY, FollowUntilSeparatingY, MoveIntoSquare };
 }
 
 using namespace moveOptions;
@@ -38,10 +38,8 @@ class Movement {
 		void approachFollowOnRightUntilCrossesLine() { Serial.println("Following line on its right until some line is hit on the left"); };
 		void approachFollowUntilCrossingY() { Serial.println("Following line until two lines of Y start to cross"); };
 		void approachFollowUntilSeparatingY() { Serial.println("Following line until two liens of Y start to separate"); };
+		void approachMoveIntoSquare() { Serial.println("Go forward some amount to be in center of square"); };
 };
-
-
-
 
 
 #endif

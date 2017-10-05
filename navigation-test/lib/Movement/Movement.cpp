@@ -64,6 +64,9 @@ void Movement::performApproach(Approach approachType) {
 		case FollowUntilSeparatingY:
 			approachFollowUntilSeparatingY();
 			break;
+		case MoveIntoSquare:
+			approachMoveIntoSquare();
+			break;
 		default:
 			Serial.println("Approach type does not exist");
 			break;

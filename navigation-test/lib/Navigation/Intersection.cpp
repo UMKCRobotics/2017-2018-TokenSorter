@@ -1,19 +1,58 @@
 #include "Navigation.h"
 
-Intersection::Intersection(Movement& move) { 
-	stateFromA = IntersectionState(move);
-	stateToA = IntersectionState(move);
-	stateFromB = IntersectionState(move);
-	stateToB = IntersectionState(move);
-	stateFromC = IntersectionState(move);
-	stateToC = IntersectionState(move);
-	stateFromD = IntersectionState(move);
-	stateToD = IntersectionState(move);
+
+Intersection::Intersection(Movement& move, String name) { 
+	stateA[To] = IntersectionState(move, this);
+	stateA[From] = IntersectionState(move,this);
+	stateB[To] = IntersectionState(move, this);
+	stateB[From] = IntersectionState(move, this);
+	stateC[To] = IntersectionState(move, this);
+	stateC[From] = IntersectionState(move, this);
+	stateD[To] = IntersectionState(move, this);
+	stateD[From] = IntersectionState(move, this);
 	movement = &move;
+	intersectName = name;
+}
+
+void Intersection::createConnection(IntersectionState localStateArr[], IntersectionState externalStateArr[]) {
+	// create a bidirectional connection between To and From versions of given ItersectionStates
+	localStateArr[To].connectTo(externalStateArr[From]);
+	externalStateArr[To].connectTo(localStateArr[From]);
 }
 
 
-IntersectionI::IntersectionI(Movement& move) : Intersection(move) {
+IntersectionStart::IntersectionStart(Movement& move, String name) : Intersection(move, name) {
+	/*
+	+---------------------------------+
+	|                                 |
+	|                A                |
+	|                                 |
+	|                ^                |
+	|               /|\               |
+	|                |                |
+	|              Start              |
+	|                |                |
+	|                |                |
+	|                |                |
+	|                                 |
+	|                B                |
+	|                                 |
+	+---------------------------------+
+	*/
+	// This intersection CANNOT be approached from B 
+	// setup states To/From A
+	stateA[To].setLeftTurn(Left180, stateB[To]);
+	stateA[To].setRightTurn(Right180, stateB[To]);
+	stateA[From].setApproach(MoveIntoSquare);
+	// setup states To/From B
+	stateB[To].setLeftTurn(Left180, stateA[To]);
+	stateB[To].setRightTurn(Right180, stateA[To]);
+	// set appropriate transitions
+	stateA[From].setTransitionTo(stateB[To]);
+}
+
+
+IntersectionI::IntersectionI(Movement& move, String name) : Intersection(move, name) {
 	/*
 
 							A
@@ -27,32 +66,32 @@ IntersectionI::IntersectionI(Movement& move) : Intersection(move) {
 				  B /		C       \ D
 	*/
 	// setup states To/From A
-	stateToA.setLeftTurn(Left135, stateToB);
-	stateToA.setRightTurn(Right135, stateToD);
-	stateFromA.setApproach(FollowUntilTokenSlot);
+	stateA[To].setLeftTurn(Left135, stateB[To]);
+	stateA[To].setRightTurn(Right135, stateD[To]);
+	stateA[From].setApproach(FollowUntilTokenSlot);
 	// setup states To/From B
-	stateToB.setLeftTurn(Left90, stateToC);
-	stateToB.setRightTurn(Right90, stateToA);
-	stateFromB.setLeftTurn(Left45, stateToA);
-	stateFromB.setRightTurn(Right90, stateToD);
-	stateFromB.setApproach(FollowUntilTokenSlot);
+	stateB[To].setLeftTurn(Left90, stateC[To]);
+	stateB[To].setRightTurn(Right90, stateA[To]);
+	stateB[From].setLeftTurn(Left45, stateA[To]);
+	stateB[From].setRightTurn(Right90, stateD[To]);
+	stateB[From].setApproach(FollowUntilTokenSlot);
 	// setup states To/From C
-	stateToC.setLeftTurn(Left90, stateToD);
-	stateToC.setRightTurn(Right90, stateToB);
-	stateFromC.setApproach(FollowUntilTokenSlot);
+	stateC[To].setLeftTurn(Left90, stateD[To]);
+	stateC[To].setRightTurn(Right90, stateB[To]);
+	stateC[From].setApproach(FollowUntilTokenSlot);
 	// setup states To/From D
-	stateToD.setLeftTurn(Left90, stateToA);
-	stateToD.setRightTurn(Right90, stateToC);
-	stateFromD.setLeftTurn(Left90, stateToB);
-	stateFromD.setRightTurn(Right45, stateToA);
-	stateFromD.setApproach(FollowUntilTokenSlot);
+	stateD[To].setLeftTurn(Left90, stateA[To]);
+	stateD[To].setRightTurn(Right90, stateC[To]);
+	stateD[From].setLeftTurn(Left90, stateB[To]);
+	stateD[From].setRightTurn(Right45, stateA[To]);
+	stateD[From].setApproach(FollowUntilTokenSlot);
 	// set appropriate transitions
-	stateFromA.setTransitionTo(stateToC);
-	stateFromC.setTransitionTo(stateToA);
+	stateA[From].setTransitionTo(stateC[To]);
+	stateC[From].setTransitionTo(stateA[To]);
 }
 
 
-IntersectionII::IntersectionII(Movement& move) : Intersection(move) {
+IntersectionII::IntersectionII(Movement& move, String name) : Intersection(move, name) {
 	/*
 
 							A
@@ -66,30 +105,30 @@ IntersectionII::IntersectionII(Movement& move) : Intersection(move) {
 							C
 	*/
 	// setup state To A
-	stateToA.setLeftTurn(Left90, stateToB);
-	stateToA.setRightTurn(Right90, stateToD);
-	stateFromA.setApproach(FollowUntilTokenSlot);
+	stateA[To].setLeftTurn(Left90, stateB[To]);
+	stateA[To].setRightTurn(Right90, stateD[To]);
+	stateA[From].setApproach(FollowUntilTokenSlot);
 	// setup state To B
-	stateToB.setLeftTurn(Left90, stateToC);
-	stateToB.setRightTurn(Right90, stateToA);
-	stateFromB.setApproach(FollowUntilTokenSlot);
+	stateB[To].setLeftTurn(Left90, stateC[To]);
+	stateB[To].setRightTurn(Right90, stateA[To]);
+	stateB[From].setApproach(FollowUntilTokenSlot);
 	// setup state To C
-	stateToC.setLeftTurn(Left90, stateToD);
-	stateToC.setRightTurn(Right90, stateToB);
-	stateFromC.setApproach(FollowUntilTokenSlot);
+	stateC[To].setLeftTurn(Left90, stateD[To]);
+	stateC[To].setRightTurn(Right90, stateB[To]);
+	stateC[From].setApproach(FollowUntilTokenSlot);
 	// setup state To D
-	stateToD.setLeftTurn(Left90, stateToA);
-	stateToD.setRightTurn(Right90, stateToC);
-	stateFromD.setApproach(FollowUntilTokenSlot);
+	stateD[To].setLeftTurn(Left90, stateA[To]);
+	stateD[To].setRightTurn(Right90, stateC[To]);
+	stateD[From].setApproach(FollowUntilTokenSlot);
 	// set appropriate transitions
-	stateFromA.setTransitionTo(stateToC);
-	stateFromC.setTransitionTo(stateToA);
-	stateFromB.setTransitionTo(stateToD);
-	stateFromD.setTransitionTo(stateToB);
+	stateA[From].setTransitionTo(stateC[To]);
+	stateC[From].setTransitionTo(stateA[To]);
+	stateB[From].setTransitionTo(stateD[To]);
+	stateD[From].setTransitionTo(stateB[To]);
 }
 
 
-IntersectionIII::IntersectionIII(Movement& move) : Intersection(move) {
+IntersectionIII::IntersectionIII(Movement& move, String name) : Intersection(move, name) {
 	/*
 
 							A
@@ -104,30 +143,30 @@ IntersectionIII::IntersectionIII(Movement& move) : Intersection(move) {
 	*/
 	// This intersection CANNOT be approached from C
 	// setup states To/From A
-	stateToA.setLeftTurn(Left135, stateToB);
-	stateToA.setRightTurn(Right135, stateToD);
-	stateFromA.setApproach(FollowUntilSeparatingY);
+	stateA[To].setLeftTurn(Left135, stateB[To]);
+	stateA[To].setRightTurn(Right135, stateD[To]);
+	stateA[From].setApproach(FollowUntilSeparatingY);
 	// setup states To/From B
-	stateToB.setLeftTurn(Left90, stateToC);
-	stateToB.setRightTurn(Right90, stateToA);
-	stateFromB.setLeftTurn(Left45, stateToA);
-	stateFromB.setRightTurn(Right90, stateToD);
-	stateFromB.setApproach(FollowOnLeftUntilCrossesLine);
+	stateB[To].setLeftTurn(Left90, stateC[To]);
+	stateB[To].setRightTurn(Right90, stateA[To]);
+	stateB[From].setLeftTurn(Left45, stateA[To]);
+	stateB[From].setRightTurn(Right90, stateD[To]);
+	stateB[From].setApproach(FollowOnLeftUntilCrossesLine);
 	// setup states To/From C
-	stateToC.setLeftTurn(Left90, stateToD);
-	stateToC.setRightTurn(Right90, stateToB);
+	stateC[To].setLeftTurn(Left90, stateD[To]);
+	stateC[To].setRightTurn(Right90, stateB[To]);
 	// setup states To/From D
-	stateToD.setLeftTurn(Left90, stateToA);
-	stateToD.setRightTurn(Right90, stateToC);
-	stateFromD.setLeftTurn(Left90, stateToB);
-	stateFromD.setRightTurn(Right45, stateToA);
-	stateFromD.setApproach(FollowOnRightUntilCrossesLine);
+	stateD[To].setLeftTurn(Left90, stateA[To]);
+	stateD[To].setRightTurn(Right90, stateC[To]);
+	stateD[From].setLeftTurn(Left90, stateB[To]);
+	stateD[From].setRightTurn(Right45, stateA[To]);
+	stateD[From].setApproach(FollowOnRightUntilCrossesLine);
 	// set appropriate transitions
-	stateFromA.setTransitionTo(stateToC);
+	stateA[From].setTransitionTo(stateC[To]);
 }
 
 
-IntersectionIV::IntersectionIV(Movement& move) : Intersection(move) {
+IntersectionIV::IntersectionIV(Movement& move, String name) : Intersection(move, name) {
 	/*
 
 							A
@@ -142,29 +181,29 @@ IntersectionIV::IntersectionIV(Movement& move) : Intersection(move) {
 	*/
 	// This intersection CANNOT be approached from C
 	// setup state To A
-	stateToA.setLeftTurn(Left90, stateToB);
-	stateToA.setRightTurn(Right90, stateToD);
-	stateFromA.setApproach(FollowUntilPerpendicularLine);
+	stateA[To].setLeftTurn(Left90, stateB[To]);
+	stateA[To].setRightTurn(Right90, stateD[To]);
+	stateA[From].setApproach(FollowUntilPerpendicularLine);
 	// setup state To B
-	stateToB.setLeftTurn(Left90, stateToC);
-	stateToB.setRightTurn(Right90, stateToA);
-	stateFromB.setApproach(FollowOnLeftUntilPerpendicularLine);
+	stateB[To].setLeftTurn(Left90, stateC[To]);
+	stateB[To].setRightTurn(Right90, stateA[To]);
+	stateB[From].setApproach(FollowOnLeftUntilPerpendicularLine);
 	// setup state To C
-	stateToC.setLeftTurn(Left90, stateToD);
-	stateToC.setRightTurn(Right90, stateToB);
+	stateC[To].setLeftTurn(Left90, stateD[To]);
+	stateC[To].setRightTurn(Right90, stateB[To]);
 	// setup state To D
-	stateToD.setLeftTurn(Left90, stateToA);
-	stateToD.setRightTurn(Right90, stateToC);
-	stateFromD.setApproach(FollowOnRightUntilPerpendicularLine);
+	stateD[To].setLeftTurn(Left90, stateA[To]);
+	stateD[To].setRightTurn(Right90, stateC[To]);
+	stateD[From].setApproach(FollowOnRightUntilPerpendicularLine);
 	// set appropriate transitions
-	stateFromA.setTransitionTo(stateToC);
-	stateFromC.setTransitionTo(stateToA);
-	stateFromB.setTransitionTo(stateToD);
-	stateFromD.setTransitionTo(stateToB);
+	stateA[From].setTransitionTo(stateC[To]);
+	stateC[From].setTransitionTo(stateA[To]);
+	stateB[From].setTransitionTo(stateD[To]);
+	stateD[From].setTransitionTo(stateB[To]);
 }
 
 
-IntersectionV::IntersectionV(Movement& move) : Intersection(move) {
+IntersectionV::IntersectionV(Movement& move, String name) : Intersection(move, name) {
 	/*
 
 							A
@@ -178,24 +217,24 @@ IntersectionV::IntersectionV(Movement& move) : Intersection(move) {
 							C
 	*/
 	// setup state To A
-	stateToA.setLeftTurn(Left90, stateToB);
-	stateToA.setRightTurn(Right90, stateToD);
-	stateFromA.setApproach(NoFollowUntilPerpendicularLine);
+	stateA[To].setLeftTurn(Left90, stateB[To]);
+	stateA[To].setRightTurn(Right90, stateD[To]);
+	stateA[From].setApproach(NoFollowUntilPerpendicularLine);
 	// setup state To B
-	stateToB.setLeftTurn(Left90, stateToC);
-	stateToB.setRightTurn(Right90, stateToA);
-	stateFromB.setApproach(FollowUntilPerpendicularLine);
+	stateB[To].setLeftTurn(Left90, stateC[To]);
+	stateB[To].setRightTurn(Right90, stateA[To]);
+	stateB[From].setApproach(FollowUntilPerpendicularLine);
 	// setup state To C
-	stateToC.setLeftTurn(Left90, stateToD);
-	stateToC.setRightTurn(Right90, stateToB);
-	stateFromC.setApproach(NoFollowUntilPerpendicularLine);
+	stateC[To].setLeftTurn(Left90, stateD[To]);
+	stateC[To].setRightTurn(Right90, stateB[To]);
+	stateC[From].setApproach(NoFollowUntilPerpendicularLine);
 	// setup state To D
-	stateToD.setLeftTurn(Left90, stateToA);
-	stateToD.setRightTurn(Right90, stateToC);
-	stateFromD.setApproach(FollowUntilPerpendicularLine);
+	stateD[To].setLeftTurn(Left90, stateA[To]);
+	stateD[To].setRightTurn(Right90, stateC[To]);
+	stateD[From].setApproach(FollowUntilPerpendicularLine);
 	// set appropriate transitions
-	stateFromA.setTransitionTo(stateToC);
-	stateFromC.setTransitionTo(stateToA);
-	stateFromB.setTransitionTo(stateToD);
-	stateFromD.setTransitionTo(stateToB);
+	stateA[From].setTransitionTo(stateC[To]);
+	stateC[From].setTransitionTo(stateA[To]);
+	stateB[From].setTransitionTo(stateD[To]);
+	stateD[From].setTransitionTo(stateB[To]);
 }
