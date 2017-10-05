@@ -53,18 +53,18 @@ IntersectionStart::IntersectionStart(Movement& move, String name) : Intersection
 
 
 IntersectionI::IntersectionI(Movement& move, String name) : Intersection(move, name) {
-	/*
+    /*
 
-							A
-							|
-							|
-							|
-				  			t
-						  / | \
-						/   |   \
-					  / 	|     \
-				  B /		C       \ D
-	*/
+                            A
+                            |
+                            |
+                            |
+                            t
+                          / | \
+                        /   |   \
+                      /     |     \
+                  B /        C       \ D
+    */
 	// setup states To/From A
 	stateA[To].setLeftTurn(Left135, stateB[To]);
 	stateA[To].setRightTurn(Right135, stateD[To]);
@@ -92,18 +92,18 @@ IntersectionI::IntersectionI(Movement& move, String name) : Intersection(move, n
 
 
 IntersectionII::IntersectionII(Movement& move, String name) : Intersection(move, name) {
-	/*
+    /*
 
-							A
-							|
-							|
-							|
-				  B --------t-------- D
-							|
-							|
-							|
-							C
-	*/
+                            A
+                            |
+                            |
+                            |
+                  B --------t-------- D
+                            |
+                            |
+                            |
+                            C
+    */
 	// setup state To A
 	stateA[To].setLeftTurn(Left90, stateB[To]);
 	stateA[To].setRightTurn(Right90, stateD[To]);
@@ -129,18 +129,18 @@ IntersectionII::IntersectionII(Movement& move, String name) : Intersection(move,
 
 
 IntersectionIII::IntersectionIII(Movement& move, String name) : Intersection(move, name) {
-	/*
+    /*
 
-							A
-							|
-							|
-							|
-				  			|
-						  /   \
-						/       \
-					  / 	      \
-				  B /		C       \ D
-	*/
+                                A
+                                |
+                                |
+                                |
+                                |
+                              /   \
+                            /       \
+                          /           \
+                      B /       C       \ D
+    */
 	// This intersection CANNOT be approached from C
 	// setup states To/From A
 	stateA[To].setLeftTurn(Left135, stateB[To]);
@@ -167,18 +167,18 @@ IntersectionIII::IntersectionIII(Movement& move, String name) : Intersection(mov
 
 
 IntersectionIV::IntersectionIV(Movement& move, String name) : Intersection(move, name) {
-	/*
+    /*
 
-							A
-							|
-							|
-							|
-				  B ----------------- D
-							
-							
-							
-							C
-	*/
+                            A
+                            |
+                            |
+                            |
+                  B ----------------- D
+                            
+                            
+                            
+                            C
+    */
 	// This intersection CANNOT be approached from C
 	// setup state To A
 	stateA[To].setLeftTurn(Left90, stateB[To]);
@@ -204,18 +204,18 @@ IntersectionIV::IntersectionIV(Movement& move, String name) : Intersection(move,
 
 
 IntersectionV::IntersectionV(Movement& move, String name) : Intersection(move, name) {
-	/*
+    /*
 
-							A
-							
-							
-							
-				  B ----------------- D
-							
-							
-							
-							C
-	*/
+                            A
+                            
+                            
+                            
+                  B ----------------- D
+                            
+                            
+                            
+                            C
+    */
 	// setup state To A
 	stateA[To].setLeftTurn(Left90, stateB[To]);
 	stateA[To].setRightTurn(Right90, stateD[To]);
