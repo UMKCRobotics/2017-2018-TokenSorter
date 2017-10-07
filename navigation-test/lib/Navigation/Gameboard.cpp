@@ -86,21 +86,21 @@ void Gameboard::initializeBoard() {
 	at1and135.createConnectionUsingStateB(at1and180.getStateD());
 	at1and180.createConnectionUsingStateB(at1and225.getStateD());
 	at1and225.createConnectionUsingStateB(at1and315.getStateD());
-	at1and315.createConnectionUsingStateD(at1and0.getStateB());
+	at1and315.createConnectionUsingStateB(at1and0.getStateD());
 	// connect 2-foot square intersections together
 	at2and0.createConnectionUsingStateB(at2and45.getStateD());
 	at2and45.createConnectionUsingStateB(at2and135.getStateD());
 	at2and135.createConnectionUsingStateB(at2and180.getStateD());
 	at2and180.createConnectionUsingStateB(at2and225.getStateD());
 	at2and225.createConnectionUsingStateB(at2and315.getStateD());
-	at2and315.createConnectionUsingStateD(at2and0.getStateB());
+	at2and315.createConnectionUsingStateB(at2and0.getStateD());
 	// connect 3-foot square intersections together
 	at3and0.createConnectionUsingStateB(at3and45.getStateD());
 	at3and45.createConnectionUsingStateB(at3and135.getStateD());
 	at3and135.createConnectionUsingStateB(at3and180.getStateD());
 	at3and180.createConnectionUsingStateB(at3and225.getStateD());
 	at3and225.createConnectionUsingStateB(at3and315.getStateD());
-	at3and315.createConnectionUsingStateD(at3and0.getStateB());
+	at3and315.createConnectionUsingStateB(at3and0.getStateD());
 	// connect 4-foot square intersections together
 	at4and0.createConnectionUsingStateB(at4and45.getStateD());
 	at4and45.createConnectionUsingStateB(at4and90.getStateD());
@@ -109,7 +109,7 @@ void Gameboard::initializeBoard() {
 	at4and180.createConnectionUsingStateB(at4and225.getStateD());
 	at4and225.createConnectionUsingStateB(at4and270.getStateD());
 	at4and270.createConnectionUsingStateB(at4and315.getStateD());
-	at4and315.createConnectionUsingStateD(at4and0.getStateB());
+	at4and315.createConnectionUsingStateB(at4and0.getStateD());
 	// connect 5-foot square intersections together
 	at5and0.createConnectionUsingStateB(at5and45.getStateD());
 	at5and45.createConnectionUsingStateB(at5and90.getStateD());
@@ -118,5 +118,5 @@ void Gameboard::initializeBoard() {
 	at5and180.createConnectionUsingStateB(at5and225.getStateD());
 	at5and225.createConnectionUsingStateB(at5and270.getStateD());
 	at5and270.createConnectionUsingStateB(at5and315.getStateD());
-	at5and315.createConnectionUsingStateD(at5and0.getStateB());
+	at5and315.createConnectionUsingStateB(at5and0.getStateD());
 }
