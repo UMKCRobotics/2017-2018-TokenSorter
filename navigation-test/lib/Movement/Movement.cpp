@@ -64,11 +64,32 @@ void Movement::performApproach(Approach approachType) {
 		case FollowUntilSeparatingY:
 			approachFollowUntilSeparatingY();
 			break;
-		case MoveIntoSquare:
-			approachMoveIntoSquare();
+		case MoveIntoStart:
+			approachMoveIntoStart();
+			break;
+		case MoveIntoDropPosition:
+			approachMoveIntoDropPosition();
 			break;
 		default:
 			Serial.println("Approach type does not exist");
+			break;
+	}
+}
+
+
+void Movement::performBackwardApproach(BackwardApproach approachType) {
+	switch (approachType) {
+		case BackwardLeaveDropPosition:
+			approachBackwardLeaveDropPosition();
+			break;
+		case BackwardFollowUntilCrossingY:
+			approachBackwardFollowUntilCrossingY();
+			break;
+		case BackwardFollowUntilSeparatingY:
+			approachBackwardFollowUntilSeparatingY();
+			break;
+		default:
+			Serial.println("Backward approach type does not exist");
 			break;
 	}
 }

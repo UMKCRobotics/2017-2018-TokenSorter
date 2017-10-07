@@ -9,7 +9,10 @@ namespace moveOptions {
 	enum Approach { NoFollowUntilPerpendicularLine, FollowUntilPerpendicularLine, FollowUntilTokenSlot,
 					FollowOnLeftUntilPerpendicularLine, FollowOnRightUntilPerpendicularLine,
 					FollowOnLeftUntilCrossesLine, FollowOnRightUntilCrossesLine,
-					FollowUntilCrossingY, FollowUntilSeparatingY, MoveIntoSquare };
+					FollowUntilCrossingY, FollowUntilSeparatingY,
+					MoveIntoStart, MoveIntoDropPosition };
+	enum BackwardApproach { BackwardLeaveDropPosition,
+							BackwardFollowUntilCrossingY, BackwardFollowUntilSeparatingY };
 }
 
 using namespace moveOptions;
@@ -19,6 +22,7 @@ class Movement {
 		Movement() {};
 		void performTurn(Turn turnType);
 		void performApproach(Approach approachType);
+		void performBackwardApproach(BackwardApproach approachType);
 		// Turn methods
 		void turnLeft45() { Serial.println("Turning 45 deg to the left"); };
 		void turnRight45() { Serial.println("Turning 45 deg to the right"); };
@@ -38,7 +42,12 @@ class Movement {
 		void approachFollowOnRightUntilCrossesLine() { Serial.println("Following line on its right until some line is hit on the left"); };
 		void approachFollowUntilCrossingY() { Serial.println("Following line until two lines of Y start to cross"); };
 		void approachFollowUntilSeparatingY() { Serial.println("Following line until two liens of Y start to separate"); };
-		void approachMoveIntoSquare() { Serial.println("Go forward some amount to be in center of square"); };
+		void approachMoveIntoStart() { Serial.println("Go forward some amount to be in center of start square"); };
+		void approachMoveIntoDropPosition() { Serial.println("Go forward some amount to be in center of start square"); };
+		// Backward Approach functions
+		void approachBackwardLeaveDropPosition() { Serial.println("Go backward some amount to leave drop position"); };
+		void approachBackwardFollowUntilCrossingY() { Serial.println("Go backward until two lines of Y start to cross"); };
+		void approachBackwardFollowUntilSeparatingY() { Serial.println("Go backward until two lines of Y start to separate"); };	
 };
 
 

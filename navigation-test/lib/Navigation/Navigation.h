@@ -7,6 +7,7 @@ using namespace moveOptions;
 
 class Intersection;
 class IntersectionState;
+class Gameboard;
 
 
 // Class used for keeping track of robot on board
@@ -17,11 +18,14 @@ class Navigation {
 
 
 // Class used to store the game board intersections + states
-class GameBoard {
+class Gameboard {
 	private:
-		IntersectionState* startNode = nullptr;
+		IntersectionState* startState = nullptr;
+		Movement* movement;
+		int round;
+		void initializeBoard();
 	public:
-		GameBoard(int round);
+		Gameboard(int round_n, Movement& move);
 };
 
 
@@ -29,24 +33,38 @@ class GameBoard {
 class IntersectionState {
 	private:
 		Movement* movement;
-		Turn leftTurnEnum; // Turn enum val corresponding to left turn behavior
-		Turn rightTurnEnum; // Turn enum val corresponding to right turn behavior
-		Approach approachEnum; // Approach enum val corresponding to approach behavior
+		String stateName;
+		Turn leftTurnEnum = NULL; // Turn enum val corresponding to left turn behavior
+		Turn rightTurnEnum = NULL; // Turn enum val corresponding to right turn behavior
+		Approach approachEnum = NULL; // Approach enum val corresponding to approach behavior
+		BackwardApproach backwardApproachEnum = NULL; // Aproach enum val corresponding to behavior when approaching backwards
 		IntersectionState* leftState = nullptr; // next state if taking a left turn
 		IntersectionState* rightState = nullptr; // next state if taking a right turn
 		IntersectionState* transitionState = nullptr;
+		IntersectionState* backwardTransitionState = nullptr;
 		Intersection* container = nullptr;
 	protected:
 		IntersectionState* connectedState = nullptr; // next state if advancing to next intersection
+		IntersectionState* backwardConnectedState = nullptr; // next state if going backwards
 	public:
 		IntersectionState();
-		IntersectionState(Movement& move, Intersection* intersection) { movement = &move; container = intersection; };
+		IntersectionState(Movement* move, Intersection* intersection, String name = "def state name")
+		{ 
+			movement = move; container = intersection; stateName = name; 
+		};
+		// setters
 		void setLeftTurn(Turn enumVal, IntersectionState& state) { leftTurnEnum = enumVal; leftState = &state; };
 		void setRightTurn(Turn enumVal, IntersectionState& state) { rightTurnEnum = enumVal; rightState = &state; };
 		void setTransitionTo(IntersectionState& state) { transitionState = &state; };
+		void setBackwardTransitionTo(IntersectionState& state) { backwardTransitionState = &state; };
 		void setApproach(Approach enumVal) { approachEnum = enumVal; };
+		void setBackwardApproach(BackwardApproach enumVal) { backwardApproachEnum = enumVal; };
 		void setContainer(Intersection* intersection) { container = intersection; };
+		// getters
+		String getName() { return stateName; };
+		// other functions
 		void connectTo(IntersectionState& state) { connectedState = &state; }; // creates one-way link
+		void connectBackwardTo(IntersectionState& state) { backwardConnectedState = &state; }; // create one-way link
 		IntersectionState* turnLeft();
 		IntersectionState* turnRight();
 		IntersectionState* goForward();
@@ -55,6 +73,7 @@ class IntersectionState {
 
 class Intersection {
 	protected:
+		// state pairs; first is from center "To" a/b/c/d, second is "From" center to a/b/c/d
 		IntersectionState stateA[2];
 		IntersectionState stateB[2];
 		IntersectionState stateC[2];
@@ -63,47 +82,68 @@ class Intersection {
 		boolean hasToken;
 		Movement* movement;
 	public:
-		Intersection(Movement& move, String name);
+		Intersection(Movement* move, String name);
 		enum Direction {To = 0, From = 1};
 		void createConnection(IntersectionState localStateArr[], IntersectionState externalStateArr[]);
+		void createBackwardConnection(IntersectionState localStateArr[], IntersectionState dropStateArr[]);
+		// shortcut functions to connect using certain states
+		void createConnectionUsingStateA(IntersectionState externalStateArr[]) { createConnection(stateA, externalStateArr); };
+		void createConnectionUsingStateB(IntersectionState externalStateArr[]) { createConnection(stateB, externalStateArr); };
+		void createConnectionUsingStateC(IntersectionState externalStateArr[]) { createConnection(stateC, externalStateArr); };
+		void createConnectionUsingStateD(IntersectionState externalStateArr[]) { createConnection(stateD, externalStateArr); };
+		void createBackwardConnectionUsingStateA(IntersectionState dropStateArr[]) { createBackwardConnection(stateA, dropStateArr); };
+		void createBackwardConnectionUsingStateB(IntersectionState dropStateArr[]) { createBackwardConnection(stateB, dropStateArr); };
+		void createBackwardConnectionUsingStateC(IntersectionState dropStateArr[]) { createBackwardConnection(stateC, dropStateArr); };
+		void createBackwardConnectionUsingStateD(IntersectionState dropStateArr[]) { createBackwardConnection(stateD, dropStateArr); };
+		// getters
 		String getName() { return intersectName; };
+		IntersectionState* getStateA() { return stateA; };
+		IntersectionState* getStateB() { return stateB; };
+		IntersectionState* getStateC() { return stateC; };
+		IntersectionState* getStateD() { return stateD; };
 };
 
 
 // Type Start intersection
 class IntersectionStart : public Intersection {
 	public:
-		IntersectionStart(Movement& move, String name);
+		IntersectionStart(Movement* move, String name);
 };
 
 // Type I intersection
 class IntersectionI : public Intersection {
 	public:
-		IntersectionI(Movement& move, String name);
+		IntersectionI(Movement* move, String name);
 };
 
 // Type II intersection
 class IntersectionII : public Intersection {
 	public:
-		IntersectionII(Movement& move, String name);
+		IntersectionII(Movement* move, String name);
 };
 
 // Type III intersection
 class IntersectionIII : public Intersection {
 	public:
-		IntersectionIII(Movement& move, String name);
+		IntersectionIII(Movement* move, String name);
 };
 
 // Type IV intersection
 class IntersectionIV : public Intersection {
 	public:
-		IntersectionIV(Movement& move, String name);
+		IntersectionIV(Movement* move, String name);
 };
 
 // Type V intersection
 class IntersectionV : public Intersection {
 	public:
-		IntersectionV(Movement& move, String name);
+		IntersectionV(Movement* move, String name);
+};
+
+// Type DropToken intersection
+class IntersectionDropToken : public Intersection {
+	public:
+		IntersectionDropToken(Movement* move, String name);
 };
 
 
