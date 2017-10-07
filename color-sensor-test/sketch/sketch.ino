@@ -1,6 +1,10 @@
 #include <Wire.h>
 #include "Adafruit_TCS34725.h"
 
+
+
+#define multiplexer_addr 0x70
+
 /* Example code for the Adafruit TCS34725 breakout library */
 
 /* Connect SCL    to analog 5
@@ -48,10 +52,30 @@ int colors[color_size][3] = {
   {91,138,116}
 };
 
+void multiplexer_select(uint8_t i) {
+  if (i > 7) return;
+ 
+  Wire.beginTransmission(multiplexer_addr);
+  Wire.write(1 << i);
+  Wire.endTransmission();  
+}
+
+void getRawColorData(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* c) {
+  multiplexer_select(0);
+  tcs.getRawData(r,g,b,c);
+}
+
+bool beginTCS(Adafruit_TCS34725& tcsref) {
+  multiplexer_select(0);
+  return tcs.begin();
+}
+
 void setup(void) {
 
   Serial.begin(115200);
+  Wire.begin();
   
+  multiplexer_select(0);
   if (tcs.begin()) {
     Serial.println("Found sensor");
   } else {
@@ -65,7 +89,8 @@ void setup(void) {
 void loop(void) {
   uint16_t r, g, b, c, colorTemp, lux;
   
-  tcs.getRawData(&r, &g, &b, &c);
+  //tcs.getRawData(&r, &g, &b, &c);
+  getRawColorData(&r, &g, &b, &c);
   colorTemp = tcs.calculateColorTemperature(r, g, b);
   lux = tcs.calculateLux(r, g, b);
   
