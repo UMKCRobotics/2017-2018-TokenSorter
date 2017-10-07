@@ -1,4 +1,5 @@
-
+#include "Wire.h"
+#include "sensorbar.h"
 
 void setup() {
 	
@@ -7,5 +8,5 @@ void setup() {
 
 void loop() {
 	
-	
+
 }
