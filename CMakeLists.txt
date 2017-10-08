@@ -6,7 +6,11 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(
         color-sensor-test/lib/Adafruit_TCS34725
         navigation-test/lib/Movement
-        navigation-test/lib/Navigation)
+        navigation-test/lib/Navigation
+        F:/Arduino/hardware/arduino/avr/cores/arduino
+        F:/Arduino/hardware/arduino/avr/libraries/Wire/src
+        /usr/share/arduino/hardware/arduino/cores/arduino
+        /usr/share/arduino/hardware/arduino/libraries/Wire/src)
 
 set(SOURCE_FILES
         color-sensor-test/lib/Adafruit_TCS34725/Adafruit_TCS34725.cpp
