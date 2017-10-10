@@ -6,7 +6,7 @@
 
 
 Movement robotMovement = Movement();
-
+Navigation navigation = Navigation(1, robotMovement);
 
 
 // input parsing
@@ -18,7 +18,9 @@ String response; // response returned to main program
 
 void setup() {
 	Serial.begin(115200);
-	Serial.write(1);
+	String statename = navigation.getCurrentStateInfo();
+	Serial.println("PRGM BEGIN");
+	Serial.println(statename);
 }
 
 void loop() {
@@ -72,15 +74,39 @@ String interpretCommand() {
 
 	// determine what to do:
 	
-	// check if movement command - make sure length is okay
+	// check if movement command
 	if (command == "l") {
-		responseString = "1";
+		// check if actually turned left
+		if (navigation.turnLeft()) {
+			responseString = navigation.getCurrentStateInfo();
+		}
+		else {
+			responseString = "Can't turn left here";
+		}
 	}
 	else if (command == "r") {
-		responseString = "1";
+		if (navigation.turnRight()) {
+			responseString = navigation.getCurrentStateInfo();
+		}
+		else {
+			responseString = "Can't turn right here";
+		}
 	}
 	else if (command == "f") {
-		responseString = "1";
+		if (navigation.goForward()) {
+			responseString = navigation.getCurrentStateInfo();
+		}
+		else {
+			responseString = "Can't go forward here";
+		}
+	}
+	else if (command == "b") {
+		if (navigation.goBackward()) {
+			responseString = navigation.getCurrentStateInfo();
+		}
+		else {
+			responseString = "Can't go backward here";
+		}
 	}
 	// check if mode-setting command
 	// TODO: add functionality to STREAMOUT

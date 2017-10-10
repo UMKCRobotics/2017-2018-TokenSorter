@@ -3,8 +3,14 @@
 
 Navigation::Navigation(int round_n, Movement& move) {
 	movement = &move; //save pointer
-	gameboard = Gameboard(round_n, movement); //create gameboard
-	currentState = gameboard.getStartState(); //set current state as start state
+	IntersectionStart intersectionStart = IntersectionStart(movement, "Test Intersection");
+	currentState = &intersectionStart.getStateA()[Intersection::To];
+	//Serial.println(intersectionStart.getName());
+	//Serial.println(intersectionStart.getName());
+	//Serial.println(intersectionStart.getName());
+	//Serial.println(intersectionStart.getName());
+	//gameboard = Gameboard(round_n, movement); //create gameboard
+	//currentState = gameboard.getStartState(); //set current state as start state
 }
 
 
@@ -13,18 +19,58 @@ String Navigation::getCurrentStateInfo() {
 }
 
 
-void Navigation::turnLeft() {
-
+bool Navigation::turnLeft() {
+	// attempt to turn left and get new state
+	IntersectionState* newState = currentState->turnLeft();
+	// if new state is a null pointer, then we can't go left so return false
+	if (!newState) {
+		return false;
+	}
+	// otherwise, current state became the new state and return true
+	else {
+		currentState = newState;
+		return true;
+	}
 }
 
-void Navigation::turnRight() {
-
+bool Navigation::turnRight() {
+	// attempt to turn right and get new state
+	IntersectionState* newState = currentState->turnRight();
+	// if new state is a null pointer, then we can't go right so return false
+	if (!newState) {
+		return false;
+	}
+	// otherwise, current state became the new state and return true
+	else {
+		currentState = newState;
+		return true;
+	}
 }
 
-void Navigation::goForward() {
-
+bool Navigation::goForward() {
+	// attempt to go forward and get new state
+	IntersectionState* newState = currentState->goForward();
+	// if new state is a null pointer, then we can't go forward so return false
+	if (!newState) {
+		return false;
+	}
+	// otherwise, current state became the new state and return true
+	else {
+		currentState = newState;
+		return true;
+	}
 }
 
-void Navigation::goBackward() {
-	
+bool Navigation::goBackward() {
+	// attempt to go backward and get new state
+	IntersectionState* newState = currentState->goBackward();
+	// if new state is a null pointer, then we can't go backward so return false
+	if (!newState) {
+		return false;
+	}
+	// otherwise, current state became the new state and return true
+	else {
+		currentState = newState;
+		return true;
+	}
 }

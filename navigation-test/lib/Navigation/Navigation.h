@@ -19,7 +19,7 @@ class Gameboard {
 		int round;
 		void initializeBoard();
 	public:
-		Gameboard();
+		Gameboard() {};
 		Gameboard(int round_n, Movement* move);
 		IntersectionState* getStartState() { return startState; };
 };
@@ -29,14 +29,14 @@ class Gameboard {
 class Navigation {
 	private:
 		IntersectionState* currentState = nullptr;
-		Gameboard gameboard;
+		//Gameboard gameboard;
 		Movement* movement;
 	public:
 		Navigation(int round_n, Movement& move);
-		void turnLeft();
-		void turnRight();
-		void goForward();
-		void goBackward();
+		bool turnLeft();
+		bool turnRight();
+		bool goForward();
+		bool goBackward();
 		String getCurrentStateInfo();
 };
 
@@ -58,10 +58,8 @@ class IntersectionState {
 	protected:
 		IntersectionState* connectedState = nullptr; // next state if advancing to next intersection
 		IntersectionState* backwardConnectedState = nullptr; // next state if going backwards
-		IntersectionState* getTransitionState() { return (transitionState ? transitionState : this); };
-		IntersectionState* getBackwardTransitionState() { return (backwardTransitionState ? backwardTransitionState : this); };
 	public:
-		IntersectionState();
+		IntersectionState() {};
 		IntersectionState(Movement* move, Intersection* intersection, String name = "def state name")
 		{ 
 			movement = move; container = intersection; stateName = name; 
@@ -84,6 +82,9 @@ class IntersectionState {
 		IntersectionState* turnRight();
 		IntersectionState* goForward();
 		IntersectionState* goBackward();
+		// perform approaches
+		IntersectionState* performApproach();
+		IntersectionState* performBackwardApproach();
 };
 
 
@@ -95,11 +96,11 @@ class Intersection {
 		IntersectionState stateC[2];
 		IntersectionState stateD[2];
 		String intersectName;
-		boolean hasToken;
+		bool hasToken;
 		Movement* movement;
 	public:
 		Intersection(Movement* move, String name);
-		enum Direction {To = 0, From = 1};
+		enum Direction {To = 0, From};
 		void createConnection(IntersectionState localStateArr[], IntersectionState externalStateArr[]);
 		void createBackwardConnection(IntersectionState localStateArr[], IntersectionState dropStateArr[]);
 		// shortcut functions to connect using certain states
