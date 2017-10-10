@@ -1,9 +1,9 @@
 #include "Navigation.h"
 
-Gameboard::Gameboard(int round_n, Movement& move) {
+Gameboard::Gameboard(int round_n, Movement* move) {
 	round = round_n;
-	movement = &move;
-
+	movement = move;
+	initializeBoard();
 }
 
 void Gameboard::initializeBoard() {
@@ -73,13 +73,8 @@ void Gameboard::initializeBoard() {
 	IntersectionDropToken dropOuterand315 = IntersectionDropToken(movement, "Outer drop and 315deg");
 
 	// CONNECTIONS
-	// connect middle drop intersections to corresponding 1-foot square intersections
-	at1and0.createBackwardConnectionUsingStateC(dropMiddleand0.getStateA());
-	at1and45.createBackwardConnectionUsingStateC(dropMiddleand45.getStateA());
-	at1and135.createBackwardConnectionUsingStateC(dropMiddleand135.getStateA());
-	at1and180.createBackwardConnectionUsingStateC(dropMiddleand180.getStateA());
-	at1and225.createBackwardConnectionUsingStateC(dropMiddleand225.getStateA());
-	at1and315.createBackwardConnectionUsingStateC(dropMiddleand315.getStateA());
+
+	/* Connecting intersections within same squares */
 	// connect 1-foot square intersections together
 	at1and0.createConnectionUsingStateB(at1and45.getStateD());
 	at1and45.createConnectionUsingStateB(at1and135.getStateD());
@@ -119,4 +114,64 @@ void Gameboard::initializeBoard() {
 	at5and225.createConnectionUsingStateB(at5and270.getStateD());
 	at5and270.createConnectionUsingStateB(at5and315.getStateD());
 	at5and315.createConnectionUsingStateB(at5and0.getStateD());
+	
+	/* Connecting intersections on different squares */
+	// **connect middle drop intersections to corresponding 1-foot square intersections
+	at1and0.createBackwardConnectionUsingStateC(dropMiddleand0.getStateA());
+	at1and45.createBackwardConnectionUsingStateC(dropMiddleand45.getStateA());
+	at1and135.createBackwardConnectionUsingStateC(dropMiddleand135.getStateA());
+	at1and180.createBackwardConnectionUsingStateC(dropMiddleand180.getStateA());
+	at1and225.createBackwardConnectionUsingStateC(dropMiddleand225.getStateA());
+	at1and315.createBackwardConnectionUsingStateC(dropMiddleand315.getStateA());
+	// **connect 1-foot square to 2-foot square
+	at1and0.createConnectionUsingStateA(at2and0.getStateC());
+	at1and45.createConnectionUsingStateA(at2and45.getStateC());
+	at1and135.createConnectionUsingStateA(at2and135.getStateC());
+	at1and180.createConnectionUsingStateA(at2and180.getStateC());
+	at1and225.createConnectionUsingStateA(at2and225.getStateC());
+	at1and315.createConnectionUsingStateA(at2and315.getStateC());
+	// **connect 2-foot square to 3-foot square
+	at2and0.createConnectionUsingStateA(at3and0.getStateC());
+	at2and45.createConnectionUsingStateA(at3and45.getStateC());
+	at2and135.createConnectionUsingStateA(at3and135.getStateC());
+	at2and180.createConnectionUsingStateA(at3and180.getStateC());
+	at2and225.createConnectionUsingStateA(at3and225.getStateC());
+	at2and315.createConnectionUsingStateA(at3and315.getStateC());
+	// **connect 3-foot square to 4-foot square
+	at3and0.createConnectionUsingStateA(at4and0.getStateC());
+	at3and45.createConnectionUsingStateA(at4and45.getStateC());
+	at3and135.createConnectionUsingStateA(at4and135.getStateC());
+	at3and180.createConnectionUsingStateA(at4and180.getStateC());
+	at3and225.createConnectionUsingStateA(at4and225.getStateC());
+	at3and315.createConnectionUsingStateA(at4and315.getStateC());
+	// **connect 4-foot square to 5-foot square
+	at4and0.createConnectionUsingStateA(at5and0.getStateC());
+	at4and45.createConnectionUsingStateA(at5and45.getStateC());
+	at4and90.createConnectionUsingStateA(at5and90.getStateC());
+	at4and135.createConnectionUsingStateA(at5and135.getStateC());
+	at4and180.createConnectionUsingStateA(at5and180.getStateC());
+	at4and225.createConnectionUsingStateA(at5and225.getStateC());
+	at4and270.createConnectionUsingStateA(at5and270.getStateC());
+	at4and315.createConnectionUsingStateA(at5and315.getStateC());
+	// **connect outer intersections to 5-foot square
+	at5and0.createBackwardConnectionUsingStateA(atOuterand0.getStateA());
+	at5and45.createBackwardConnectionUsingStateA(atOuterand45.getStateA());
+	at5and90.createConnectionUsingStateA(atOuterand90.getStateC());
+	at5and135.createBackwardConnectionUsingStateA(atOuterand135.getStateA());
+	at5and180.createBackwardConnectionUsingStateA(atOuterand180.getStateA());
+	at5and225.createBackwardConnectionUsingStateA(atOuterand225.getStateA());
+	at5and270.createConnectionUsingStateA(atOuterand270.getStateC());
+	at5and315.createBackwardConnectionUsingStateA(atOuterand315.getStateA());
+	// **connect outer drop and start intersections to outer intersections
+	atOuterand0.createBackwardConnectionUsingStateC(dropOuterand0.getStateA());
+	atOuterand45.createBackwardConnectionUsingStateC(dropOuterand45.getStateA());
+	atOuterand90.createConnectionUsingStateA(dropOuterand90.getStateA());
+	atOuterand135.createBackwardConnectionUsingStateC(dropOuterand135.getStateA());
+	atOuterand180.createBackwardConnectionUsingStateC(dropOuterand180.getStateA());
+	atOuterand225.createBackwardConnectionUsingStateC(dropOuterand225.getStateA());
+	atOuterand270.createConnectionUsingStateA(dropOuterand270.getStateA());
+	atOuterand315.createBackwardConnectionUsingStateC(dropOuterand315.getStateA());
+
+	// set a start state for the gameboard (going "To" A from center)
+	startState = &dropOuterand270.getStateA()[Intersection::To];
 }

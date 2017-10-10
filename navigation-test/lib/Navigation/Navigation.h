@@ -7,14 +7,8 @@ using namespace moveOptions;
 
 class Intersection;
 class IntersectionState;
+class Navigation;
 class Gameboard;
-
-
-// Class used for keeping track of robot on board
-class Navigation {
-
-
-};
 
 
 // Class used to store the game board intersections + states
@@ -25,7 +19,25 @@ class Gameboard {
 		int round;
 		void initializeBoard();
 	public:
-		Gameboard(int round_n, Movement& move);
+		Gameboard();
+		Gameboard(int round_n, Movement* move);
+		IntersectionState* getStartState() { return startState; };
+};
+
+
+// Class used for keeping track of robot on board
+class Navigation {
+	private:
+		IntersectionState* currentState = nullptr;
+		Gameboard gameboard;
+		Movement* movement;
+	public:
+		Navigation(int round_n, Movement& move);
+		void turnLeft();
+		void turnRight();
+		void goForward();
+		void goBackward();
+		String getCurrentStateInfo();
 };
 
 
@@ -46,6 +58,8 @@ class IntersectionState {
 	protected:
 		IntersectionState* connectedState = nullptr; // next state if advancing to next intersection
 		IntersectionState* backwardConnectedState = nullptr; // next state if going backwards
+		IntersectionState* getTransitionState() { return (transitionState ? transitionState : this); };
+		IntersectionState* getBackwardTransitionState() { return (backwardTransitionState ? backwardTransitionState : this); };
 	public:
 		IntersectionState();
 		IntersectionState(Movement* move, Intersection* intersection, String name = "def state name")
@@ -62,12 +76,14 @@ class IntersectionState {
 		void setContainer(Intersection* intersection) { container = intersection; };
 		// getters
 		String getName() { return stateName; };
+		String getFullName();
 		// other functions
 		void connectTo(IntersectionState& state) { connectedState = &state; }; // creates one-way link
 		void connectBackwardTo(IntersectionState& state) { backwardConnectedState = &state; }; // create one-way link
 		IntersectionState* turnLeft();
 		IntersectionState* turnRight();
 		IntersectionState* goForward();
+		IntersectionState* goBackward();
 };
 
 
