@@ -1,5 +1,19 @@
-#include "Navigation.h"
+#include "IntersectionState.h"
 
+
+IntersectionState::IntersectionState(Movement* move, Intersection* intersection, String name)
+{
+	movement = move; container = intersection; stateName = name;
+}
+
+void IntersectionState::connectTo(IntersectionState& state) {
+	// creates one-way link
+	connectedState = &state;
+};
+void IntersectionState::connectBackwardTo(IntersectionState& state) {
+	// create one-way link
+	backwardConnectedState = &state;
+};
 
 IntersectionState* IntersectionState::performApproach() {
 	// check if approach was set
@@ -37,7 +51,7 @@ IntersectionState* IntersectionState::performBackwardApproach() {
 
 
 String IntersectionState::getFullName() {
-	return "Intersection " + container->getName() + "in state " + getName();
+	return "Intersection |" + container->getName() + "| in state " + getName();
 }
 
 IntersectionState* IntersectionState::turnLeft() {
@@ -73,10 +87,15 @@ IntersectionState* IntersectionState::goForward() {
 
 
 IntersectionState* IntersectionState::goBackward() {
-	// if there does not exist a forward connected state, return null ptr
-	if (!backwardConnectedState) {
+	// if there does not exist a backward state or the backward state doesn't have a backward connected state, return null ptr
+	if (!backwardState || !backwardState->backwardConnectedState) {
 		return nullptr;
 	}
 	// otherwise, ask the node to perform movement, return new state
-	return connectedState->performBackwardApproach();
-}		
+	return backwardState->backwardConnectedState->performBackwardApproach();
+}
+
+
+IntersectionState::~IntersectionState()
+{
+}

@@ -5,8 +5,8 @@
 
 
 
-Movement robotMovement = Movement();
-Navigation navigation = Navigation(1, robotMovement);
+Movement robotMovement;// = Movement();
+Navigation navigation;// = Navigation(1, robotMovement);
 
 
 // input parsing
@@ -18,6 +18,8 @@ String response; // response returned to main program
 
 void setup() {
 	Serial.begin(115200);
+	robotMovement = Movement();
+	navigation = Navigation(1, robotMovement);
 	String statename = navigation.getCurrentStateInfo();
 	Serial.println("PRGM BEGIN");
 	Serial.println(statename);
