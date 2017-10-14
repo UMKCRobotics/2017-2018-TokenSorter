@@ -159,7 +159,7 @@ class ColorSensor
         
         if (current_diff < min_diff)
         {
-          best_color_enum = i;
+          best_color_enum = (COLOR_NAME)i;
           min_diff = current_diff;
         } // end if
       } // end loop
