@@ -31,9 +31,10 @@ class ColorSensor
     const int BLUE_MIN = 40;
     const int BLUE_MAX = 130;
 
-    const static int COLOR_ARRAY_SIZE = 7;
+    const static int COLOR_ARRAY_SIZE = 8;
     const int DIFF_CONSTRAINT = 45;
-    const String COLOR_NAMES[COLOR_ARRAY_SIZE] = {
+    const String COLOR_NAMES_STRINGS[COLOR_ARRAY_SIZE] {
+      "Unknown",
       "Red",
       "Green",
       "Blue",
@@ -41,7 +42,7 @@ class ColorSensor
       "Magenta",
       "Cyan",
       "Gray"
-    };
+    };    
 
     // Holds the values of the colors
     int colors[COLOR_ARRAY_SIZE][3] = {
@@ -77,32 +78,49 @@ class ColorSensor
 
     int constrainColors(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* c, int* redAct, int* blueAct, int* greenAct)
     {
-      uint32_t sum = c;
+      uint32_t sum = *c;
       float red, green, blue;
-      red = (int)r;
-      green = (int)g;
-      blue = (int)b;
+      red = *r;
+      green = *g;
+      blue = *b;
       
-      (red /= sum) * 256;
-      (green /= sum) * 256;
-      (blue /= sum) * 256;
+      red = (red / sum) * 256;
+      green = (green / sum) * 256;
+      blue = (blue / sum) * 256;
       
-      redAct = constrain(map((int)red,RED_MIN,RED_MAX,0,255),0,255);
-      greenAct = constrain(map((int)green,GREEN_MIN,GREEN_MAX,0,255),0,255);
-      blueAct = constrain(map((int)blue,BLUE_MIN,BLUE_MAX,0,255),0,255);
+      *redAct = constrain(map(red,RED_MIN,RED_MAX,0,255),0,255);
+      *greenAct = constrain(map(green,GREEN_MIN,GREEN_MAX,0,255),0,255);
+      *blueAct = constrain(map(blue,BLUE_MIN,BLUE_MAX,0,255),0,255);
+
+      Serial.print("RGB: ");
+      Serial.print(*redAct);
+      Serial.print(" ");
+      Serial.print(*greenAct);
+      Serial.print(" ");
+      Serial.println(*blueAct); 
     } // end constrainColors
     
   public:
     ColorSensor()
     {
     } // end constructor
+
+    enum COLOR_NAME {
+      Unknown = 0,
+      Red,
+      Green,
+      Blue,
+      Yellow,
+      Magenta,
+      Cyan,
+      Gray
+    };
     
     // multiplexerPort between 0 and 7 inclusive
-    ColorSensor(uint8_t multiplexerPort)
+    void initSensor(uint8_t multiplexerPort)
     {
       this->multiplexerPort = multiplexerPort;
-
-      Serial.begin(115200);
+      
       Wire.begin();
 
       startMultiplex();
@@ -115,9 +133,9 @@ class ColorSensor
         Serial.println("No TCS34725 found ... check your connections");
         while (1);
       } // end if
-    } // end constructor
+    } // end initSensor
 
-    String getColor()
+    COLOR_NAME getColor()
     {
       uint16_t r, g, b, c; //, colorTemp, lux;
       int redAct, greenAct, blueAct;
@@ -125,40 +143,50 @@ class ColorSensor
       getRawColorData(&r, &g, &b, &c);
       constrainColors(&r, &g, &b, &c, &redAct, &blueAct, &greenAct);
 
+      
+
+
       // find closes color
-      int best_color_index = 0;
+      COLOR_NAME best_color_enum;
       unsigned long min_diff = -1;
       
-      for (int i = 0; i < COLOR_ARRAY_SIZE; i++)
+      for (int i = Red; i <= Gray ; i++)
       {
         unsigned long current_diff = 0;
-        current_diff += abs(colors[i][0] - redAct);
-        current_diff += abs(colors[i][1] - greenAct);
-        current_diff += abs(colors[i][2] - blueAct);
+        current_diff += abs(colors[i-1][0] - redAct);
+        current_diff += abs(colors[i-1][1] - greenAct);
+        current_diff += abs(colors[i-1][2] - blueAct);
         
         if (current_diff < min_diff)
         {
-          best_color_index = i;
+          best_color_enum = i;
           min_diff = current_diff;
         } // end if
       } // end loop
 
+      Serial.print("Error: ");
+      Serial.println(min_diff);
+
       if (min_diff < DIFF_CONSTRAINT)
       {
-        return COLOR_NAMES[best_color_index];
+        return best_color_enum;
       }
       else
       {
-        return "Unknown";
+        return Unknown;
       } // end if
     } // end getColor
 }; // end class ColorSensor
 
-//ColorSensor sensor1 = new ColorSensor();
+
+ColorSensor sensor1 = ColorSensor();
+ColorSensor sensor2 = ColorSensor();
 
 void setup(void)
 {
-  ColorSensor sensor1 = new ColorSensor(0);
+  Serial.begin(115200);
+   sensor1.initSensor(0);
+   sensor1.initSensor(1);
 
   
   // Now we're ready to get readings!
@@ -166,8 +194,10 @@ void setup(void)
 
 void loop(void) {
 
-  Serial.print(sensor1.getColor());
-  
+  Serial.println("Sensor1:");
+  Serial.println(sensor1.getColor());
+  Serial.println("Sensor2:");
+  Serial.println(sensor2.getColor());
   
 }
 
