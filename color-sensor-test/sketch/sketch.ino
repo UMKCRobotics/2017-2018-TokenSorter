@@ -1,11 +1,10 @@
 #include <Wire.h>
 #include "Adafruit_TCS34725.h"
 
-#define multiplexer_addr 0x70
+#define multiplexer_addr 0x70 // needs to be changed if using a different mulitplexer
 
 class ColorSensor
 {
-
   /* Example code for the Adafruit TCS34725 breakout library */
 
   /* Connect SCL    to analog 5
@@ -24,6 +23,7 @@ class ColorSensor
   private:
     Adafruit_TCS34725 TCS = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_101MS, TCS34725_GAIN_1X);
 
+    // color min/max for RGB
     const int RED_MIN = 35;
     const int RED_MAX = 180;
     const int GREEN_MIN = 40;
@@ -32,8 +32,11 @@ class ColorSensor
     const int BLUE_MAX = 130;
 
     const static int COLOR_ARRAY_SIZE = 8;
-    const int DIFF_CONSTRAINT = 45;
-    const String COLOR_NAMES_STRINGS[COLOR_ARRAY_SIZE] {
+    
+    const unsigned int DIFF_CONSTRAINT = 45; // color differntial constraint
+    
+    const String COLOR_NAMES_STRINGS[COLOR_ARRAY_SIZE]
+    {
       "Unknown",
       "Red",
       "Green",
@@ -45,7 +48,8 @@ class ColorSensor
     };    
 
     // Holds the values of the colors
-    int colors[COLOR_ARRAY_SIZE][3] = {
+    int colors[COLOR_ARRAY_SIZE][3] =
+    {
       {255,19,39}, // red
       {70,187,99}, // green
       {21,144,255}, // blue
@@ -57,6 +61,7 @@ class ColorSensor
 
     uint8_t multiplexerPort = 0;
 
+    // Primes the multiplexer for a command
     void startMultiplex()
     {
       Wire.beginTransmission(multiplexer_addr);
@@ -64,19 +69,22 @@ class ColorSensor
       Wire.endTransmission();
     } // end startMultiplex
 
+    // Retrieves the raw color data from the color sensor, passes variables by reference
     void getRawColorData(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* c)
     {
       startMultiplex();
       TCS.getRawData(r,g,b,c);
     } // end getRawColorData
 
+    // Starts the color sensor
     bool beginTCS(Adafruit_TCS34725& tcsref)
     {
       startMultiplex();
       return TCS.begin();
     } // end beginTCS
 
-    int constrainColors(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* c, int* redAct, int* blueAct, int* greenAct)
+    // Constrains the colors to a 256 color value as the sensor can return values higher than 256
+    void constrainColors(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* c, int* redAct, int* blueAct, int* greenAct)
     {
       uint32_t sum = *c;
       float red, green, blue;
@@ -97,15 +105,18 @@ class ColorSensor
       Serial.print(" ");
       Serial.print(*greenAct);
       Serial.print(" ");
-      Serial.println(*blueAct); 
+      Serial.println(*blueAct);
     } // end constrainColors
     
   public:
+    // Default constructor
     ColorSensor()
     {
     } // end constructor
 
-    enum COLOR_NAME {
+    // Enum that holds the values for the different colors used
+    enum COLOR_NAME
+    {
       Unknown = 0,
       Red,
       Green,
@@ -115,8 +126,10 @@ class ColorSensor
       Cyan,
       Gray
     };
-    
-    // multiplexerPort between 0 and 7 inclusive
+
+    // Assigns multiplexerPort variable to class variable and starts color sensor
+    // Call initSensor after initializing ColorSensor variable
+    // multiplexerPort should be between 0 and 7 inclusive
     void initSensor(uint8_t multiplexerPort)
     {
       this->multiplexerPort = multiplexerPort;
@@ -135,19 +148,17 @@ class ColorSensor
       } // end if
     } // end initSensor
 
+    // Gets the color from the color sensor and returns the enum of the color the sensor sees
     COLOR_NAME getColor()
     {
-      uint16_t r, g, b, c; //, colorTemp, lux;
+      uint16_t r, g, b, c;
       int redAct, greenAct, blueAct;
   
       getRawColorData(&r, &g, &b, &c);
       constrainColors(&r, &g, &b, &c, &redAct, &blueAct, &greenAct);
 
-      
-
-
-      // find closes color
-      COLOR_NAME best_color_enum;
+      // find closest color
+      COLOR_NAME best_color_enum = Unknown;
       unsigned long min_diff = -1;
       
       for (int i = Red; i <= Gray ; i++)
@@ -178,26 +189,21 @@ class ColorSensor
     } // end getColor
 }; // end class ColorSensor
 
-
 ColorSensor sensor1 = ColorSensor();
 ColorSensor sensor2 = ColorSensor();
 
 void setup(void)
 {
-  Serial.begin(115200);
+   Serial.begin(115200);
    sensor1.initSensor(0);
    sensor1.initSensor(1);
-
-  
-  // Now we're ready to get readings!
 }
 
-void loop(void) {
-
+void loop(void)
+{
   Serial.println("Sensor1:");
   Serial.println(sensor1.getColor());
   Serial.println("Sensor2:");
   Serial.println(sensor2.getColor());
-  
 }
 
