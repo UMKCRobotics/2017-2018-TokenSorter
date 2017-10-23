@@ -15,7 +15,6 @@ private:
 	Movement* movement;
 	int round;
 	void initializeBoard();
-	IntersectionState* testInit();
 public:
 	Gameboard(int round_n, Movement* move);
 	~Gameboard();
