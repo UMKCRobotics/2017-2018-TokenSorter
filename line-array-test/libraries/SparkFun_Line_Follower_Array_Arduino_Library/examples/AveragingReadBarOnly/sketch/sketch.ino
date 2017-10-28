@@ -83,9 +83,9 @@ void loop()
 
   //Get the data from the bar and save it to the circular buffer positionHistory.
   int temp = mySensorBar.getDensity();
-  int array;
-  setLineByte(array);
-  Serial.print(array)
+  int array[8];
+  setLineByte(*array);
+  printArray(*array);
   if( (temp < 4)&&(temp > 0) )
   {
     positionHistory.pushElement( mySensorBar.getPosition());
@@ -142,17 +142,17 @@ void loop()
   }
 }
 
-void setLineByte(line_byte_array)
+void setLineByte(int& line_byte_array)
 {
 	int line_byte = mySensorBar.getRaw(); //Gets the 8 values as a uint8_t (binary form).
 	convertLineByteIntoArray(line_byte, line_byte_array);
 }
 
-void convertLineByteIntoArray(line_byte, line_byte_array)
+void convertLineByteIntoArray(int line_byte, int&[] line_byte_array)
 {
 	uint8_t binary_array;
 	int8_t right_shift;
-	for (int8_t i = 0; i < 8; i++){
+	for (int i = 0; i < 8; i++){
 		binary_array = line_byte;
 		binary_array << i; //Remove anything to the left.
 		binary_array >> 7; //Move it all the way to the rightmost position.
@@ -164,3 +164,11 @@ void convertLineByteIntoArray(line_byte, line_byte_array)
 		}
 	}
 }
+
+void printArray(int &[]array)
+{
+  for (int i = 0; i < 8; i++){
+    Serial.println(array[i]);
+  }
+}
+
