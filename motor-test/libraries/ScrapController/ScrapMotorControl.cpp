@@ -58,6 +58,7 @@ float ScrapMotorControl::constrainFloat(float x, float min, float max) {
 void ScrapMotorControl::reset() {
 	speedGoal = 0;
 	motor->stop();
+	encoder->resetCount();
 	prevSpeed = 0;
 	prevCount = 0;
 	prevTime = 0;

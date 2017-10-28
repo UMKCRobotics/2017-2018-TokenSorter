@@ -20,6 +20,8 @@ ScrapMotorSinglePin motorR = ScrapMotorSinglePin(MOTOR_RIGHT_D,MOTOR_RIGHT_PWM);
 ScrapMotorControl motorControlL = ScrapMotorControl(motorL, encoderL);
 ScrapMotorControl motorControlR = ScrapMotorControl(motorR, encoderR);
 
+ScrapController singleControl = ScrapController(motorControlL);
+ScrapDualController controller = ScrapDualController(motorControlL,motorControlR);
 
 
 void setup() {
