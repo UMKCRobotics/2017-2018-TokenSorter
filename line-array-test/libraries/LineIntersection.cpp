@@ -19,6 +19,8 @@ class LineIntersection{
 		SensorBar mySensorBar(SX1509_ADDRESS);
 		uint_8 line_byte;
 		int line_byte_array[8];
+		int line_density;
+		//int intersection_counter;
 		
 		
 	public:
@@ -26,6 +28,7 @@ class LineIntersection{
 		int checkIntersection();
 		int determineHalf(string left_or_right);
 		int countOnes(int start, int end);
+		void setLineDensity();
 		void setLineByte();
 		void convertLineByteIntoArray();
 		//void bitwiseShiftByte(int); Replaced by convertLineByteIntoArray().
@@ -37,6 +40,35 @@ LineIntersection::LineIntersection()
 	mySensorBar.clearInvertBits();
 	mySensorBar.begin();
 	setLineByte();
+}
+
+//TODO: Add all different intersection types.
+
+int LineIntersection::checkIntersection()
+{
+	//intersection_count++;
+	int left_line, right_line;
+	
+	setLineByte(); //Update the values first.
+	setLineDensity();
+	if (line_density == 8){
+		//Return that it is a horizontal.
+	}
+	else {
+		left_line = determineHalf("left");
+		right_line = determineHalf("right");
+		setLineDensity(left_line + right_line);
+		
+		if (left_line == HORIZONTAL_LINE){ //The horizontal line is already accounted for, so this takes all other intersections with a left horizontal.
+			//Return left (or default direction).
+		}
+		else if (){
+			//
+		}
+		else {
+			//
+		}
+	}
 }
 
 //NOTE: For diagonal lines, the sensor cannot differentiate between y=x and y=-x diagonals, so we will need a workaround.
@@ -71,32 +103,20 @@ int LineIntersection::determineHalf(string left_or_right)
 	}
 }
 
-//TODO: Add all different intersection types.
-
-int LineIntersection::checkIntersection()
-{
-	setLineByte(); //Update the values first.
-	int left_line, right_line;
-	left_line = determineHalf("left");
-	right_line = determineRightHalf("right");
-	if (left_line == HORIZONTAL_LINE && right_line == HORIZONTAL_LINE){
-		//This occurs when the robot first gets on the line.
-	}
-	else if (left_line == HORIZONTAL_LINE){
-		//Return left (or default direction).
-	}
-	else if (){
-		//
-	}
-	else {
-		//
-	}
-}
-
 void LineIntersection::setLineByte()
 {
 	line_byte = mySensorBar.getRaw(); //Gets the 8 values as a uint_8 (binary form).
 	convertLineByteIntoArray();
+}
+
+void LineIntersection::setLineDensity(int user_density = 0)
+{
+	if (user_density){
+		line_density = user_density;
+	}
+	else {
+	line_density = mySensorBar.getDensity();
+	}
 }
 
 void LineIntersection::convertLineByteIntoArray()
