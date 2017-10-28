@@ -148,7 +148,7 @@ void setLineByte(int& line_byte_array)
 	convertLineByteIntoArray(line_byte, line_byte_array);
 }
 
-void convertLineByteIntoArray(int line_byte, int&[] line_byte_array)
+void convertLineByteIntoArray(int line_byte, int& line_byte_array[])
 {
 	uint8_t binary_array;
 	int8_t right_shift;
@@ -165,7 +165,7 @@ void convertLineByteIntoArray(int line_byte, int&[] line_byte_array)
 	}
 }
 
-void printArray(int &[]array)
+void printArray(int &array[])
 {
   for (int i = 0; i < 8; i++){
     Serial.println(array[i]);
