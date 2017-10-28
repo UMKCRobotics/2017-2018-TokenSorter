@@ -1,5 +1,3 @@
-//Originally contained more functions, but removed for simplicity.
-
 #include "Wire.h"
 #include "sensorbar.h"
 
@@ -31,7 +29,6 @@ class LineIntersection{
 		void setLineDensity();
 		void setLineByte();
 		void convertLineByteIntoArray();
-		//void bitwiseShiftByte(int); Replaced by convertLineByteIntoArray().
 };
 
 LineIntersection::LineIntersection()
@@ -95,7 +92,7 @@ int LineIntersection::determineHalf(string left_or_right)
 	}
 	else if (sensor_line_count == 1){
 		//TOFIX: This could be a diagonal or vertical line.
-		//moveALittleBitForward() then call again to see if vertical or diagonal?
+		//Possible solution: moveALittleBitForward() then call again to see if vertical or diagonal?
 		return ;
 	}
 	else {
@@ -127,7 +124,7 @@ void LineIntersection::convertLineByteIntoArray()
 		binary_array = line_byte;
 		binary_array << i; //Remove anything to the left.
 		binary_array >> (BYTE_SIZE - 1); //Move it all the way to the rightmost position.
-		if (binary_array == 1){ //TOCHECK: This is the main part I am unsure of. Is the unsigned 8-bit int read as decimal in any non-bitwise operation? 
+		if (binary_array == 1){ //TOCHECK: The unsigned 8-bit int is read as decimal in any non-bitwise operation, correct? 
 			line_byte_array[i] = 1;
 		}
 		else {
