@@ -167,9 +167,9 @@ class ScrapMotorControl {
 		// set speed goal
 		void setSpeed(float newSpeed); // set speed only
 		// set min speed
-		void setMinSpeed(float newMin);
+		void setMinSpeed(float newMin) { minSpeed = newMin; };
 		// set max speed
-		void setMaxSpeed(float newMax);
+		void setMaxSpeed(float newMax) { maxSpeed = newMax; };
 		// set min motor power
 		void setMinPower(int power) { minPower = power; };
 		// change speed

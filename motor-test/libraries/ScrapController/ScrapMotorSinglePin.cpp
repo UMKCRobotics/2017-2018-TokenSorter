@@ -45,7 +45,7 @@ void ScrapMotorSinglePin::setDirection(int pwm) {
 		currDir = -1;
 	}
 	else {
-		digitalWrite(PIN_PWM,LOW);
+		analogWrite(PIN_PWM,pwm);
 		digitalWrite(PIN_D,HIGH);
 		currDir = 0;
 	}
