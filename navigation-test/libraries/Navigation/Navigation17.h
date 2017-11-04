@@ -2,9 +2,9 @@
 #define INC_2017_2018_TOKENSORTER_NAVIGATION17_H
 
 #include <Arduino.h>
+#include "Movement.h"
 #include "Coordinate.h"
 
-class Movement;
 
 class Navigation17 {
 private:
@@ -14,6 +14,7 @@ private:
     Coordinate current_position;
     Direction facing;
     Coordinate available_directions[DIRECTION_COUNT];
+    Approach approaches[DIRECTION_COUNT];
 
     /** call this when arriving somewhere **/
     void set_available_directions();

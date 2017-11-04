@@ -7,6 +7,7 @@
 namespace moveOptions {
 	enum Turn { Left45=1, Right45, Left90, Right90, Left135, Right135, Left180, Right180 };
 	enum Approach {
+        NoApproach=0,
 		NoFollowUntilPerpendicularLine=1, FollowUntilPerpendicularLine, FollowUntilTokenSlot,
 		FollowOnLeftUntilPerpendicularLine, FollowOnRightUntilPerpendicularLine,
 		FollowOnLeftUntilCrossesLine, FollowOnRightUntilCrossesLine,
