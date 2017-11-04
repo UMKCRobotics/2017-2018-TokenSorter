@@ -1,7 +1,7 @@
 #ifndef INC_2017_2018_TOKENSORTER_COORDINATE_H
 #define INC_2017_2018_TOKENSORTER_COORDINATE_H
 
-#include <arduino.h>
+#include "Arduino.h"
 
 enum Direction {
     EAST = 0,

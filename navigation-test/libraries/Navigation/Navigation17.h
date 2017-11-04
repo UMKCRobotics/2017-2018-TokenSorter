@@ -17,19 +17,19 @@ private:
     Approach approaches[DIRECTION_COUNT];
 
     /** call this when arriving somewhere **/
-    void set_available_directions();
+    void set_available_directions();  // and approaches
     /** 1 for left, -1 for right **/
     bool turn(const int& direction);
 public:
     // TODO: starting position and starting facing direction
     Navigation17() : movement(nullptr),
-                     current_position(0, 0),
-                     facing(EAST) {
+                     current_position(6, 7),
+                     facing(NORTH) {
         set_available_directions();
     }
     explicit Navigation17(Movement* _movement) : movement(_movement),
-                                                 current_position(0, 0),
-                                                 facing(EAST) {
+                                                 current_position(6, 7),
+                                                 facing(NORTH) {
         set_available_directions();
     }
 
