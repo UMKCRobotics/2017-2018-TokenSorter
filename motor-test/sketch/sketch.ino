@@ -41,6 +41,8 @@ void setup() {
 	//motorControlR.stop();
 	motorControlL.setControl(1800);
 	motorControlR.setControl(1800);
+	motorControlL.stop();
+	motorControlR.stop();
 	Serial.begin(9600);
 	unsigned long previousTime = millis();
 }

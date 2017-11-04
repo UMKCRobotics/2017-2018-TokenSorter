@@ -77,14 +77,16 @@ String LineIntersection::getArrayDataInString() {
 	String lineData = "";
 	uint8_t binary_array;
 	int8_t right_shift;
+	int bit_value;
 	//get data
 	line_byte = mySensorBar->getRaw();
 	
-	for (int8_t i = 0; i < BYTE_SIZE; i++){
-		binary_array = line_byte;
-		binary_array << i; //Remove anything to the left.
-		binary_array >> (BYTE_SIZE - 1); //Move it all the way to the rightmost position.
-		if (binary_array == 1){ //TOCHECK: The unsigned 8-bit int8_t is read as decimal in any non-bitwise operation, correct?
+	for (int8_t i = BYTE_SIZE-1; i >= 0; i--){
+		//binary_array = line_byte;
+		//binary_array << i; //Remove anything to the left.
+		//binary_array >> (BYTE_SIZE - 1); //Move it all the way to the rightmost position.
+		bit_value = bitRead(line_byte,i);
+		if (bit_value == 1){ //TOCHECK: The unsigned 8-bit int8_t is read as decimal in any non-bitwise operation, correct?
 			//line_byte_array[i] = 1;
 			lineData += "1";
 		}
