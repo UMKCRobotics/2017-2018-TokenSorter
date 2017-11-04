@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.6)
 project(2017_2018_TokenSorter)
+project(Navigation_Test)
 
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(
         color-sensor-test/libraries/Adafruit_TCS34725
+        navigation-test/libraries  # fake arduino for pc testing
         navigation-test/libraries/Movement
         navigation-test/libraries/Navigation
         F:/Arduino/hardware/arduino/avr/cores/arduino
@@ -13,8 +15,6 @@ include_directories(
         /usr/share/arduino/hardware/arduino/libraries/Wire/src)
 
 set(SOURCE_FILES
-        color-sensor-test/libraries/Adafruit_TCS34725/Adafruit_TCS34725.cpp
-        color-sensor-test/libraries/Adafruit_TCS34725/Adafruit_TCS34725.h
         color-sensor-test/sketch/sketch.ino
         color-sensor-test/jno.jno
         navigation-test/libraries/Movement/Movement.cpp
@@ -36,6 +36,17 @@ set(SOURCE_FILES
         navigation-test/jno.jno
         navigation-test/libraries/Navigation/Navigation17.cpp
         navigation-test/libraries/Navigation/Navigation17.h
-        navigation-test/libraries/Navigation/Coordinate.h)
+        navigation-test/libraries/Navigation/Coordinate.h
+        navigation-test/libraries/Arduino.h
+        navigation-test/nav_pc_test.cpp)
+set(NAV_TEST_SOURCE_FILES
+        navigation-test/libraries/Movement/Movement.cpp
+        navigation-test/libraries/Movement/Movement.h
+        navigation-test/libraries/Navigation/Navigation17.cpp
+        navigation-test/libraries/Navigation/Navigation17.h
+        navigation-test/libraries/Navigation/Coordinate.h
+        navigation-test/libraries/Arduino.h
+        navigation-test/nav_pc_test.cpp)
 
 add_executable(2017_2018_TokenSorter ${SOURCE_FILES})
+add_executable(Navigation_Test ${NAV_TEST_SOURCE_FILES})
