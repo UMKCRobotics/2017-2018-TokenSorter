@@ -8,7 +8,7 @@ class Movement;
 
 class Navigation17 {
 private:
-    const static int MAX_R = 8;  // r coordinate for drop locations - TODO: verify
+    const static int MAX_R = 7;  // r coordinate for drop locations - TODO: verify
 
     Movement* movement;
     Coordinate current_position;
@@ -17,16 +17,20 @@ private:
 
     /** call this when arriving somewhere **/
     void set_available_directions();
+    /** 1 for left, -1 for right **/
+    bool turn(const int& direction);
 public:
     // TODO: starting position and starting facing direction
     Navigation17() : movement(nullptr),
                      current_position(0, 0),
-                     facing(EAST),
-                     available_directions({{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}}) {}
+                     facing(EAST) {
+        set_available_directions();
+    }
     explicit Navigation17(Movement* _movement) : movement(_movement),
                                                  current_position(0, 0),
-                                                 facing(EAST),
-                                                 available_directions({{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}}) {}
+                                                 facing(EAST) {
+        set_available_directions();
+    }
 
     bool turnLeft();
     bool turnRight();

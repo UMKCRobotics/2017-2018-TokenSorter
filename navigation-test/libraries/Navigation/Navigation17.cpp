@@ -45,54 +45,45 @@ void Navigation17::set_available_directions() {
         current_position.t = 0;
 
         for (int i = 0; i < DIRECTION_COUNT; ++i) {
-            available_directions[i].t = 1;
+            available_directions[i].t = i;
             available_directions[i].r = 1;
         }
     }
 }
 
-bool Navigation17::turnLeft() {
+bool Navigation17::turn(const int& direction) {
     // find the amount to turn
-    Direction checking_direction = (facing + 1) % DIRECTION_COUNT;
+    Direction checking_direction = (facing + direction) % DIRECTION_COUNT;
     int amount_turned = 1;  // in octants
     while (available_directions[checking_direction].t == 0 && available_directions[checking_direction].r == 0) {
-        checking_direction = (checking_direction + 1) % DIRECTION_COUNT;
+        checking_direction = (checking_direction + direction) % DIRECTION_COUNT;
         ++amount_turned;
 
-        if (amount_turned > DIRECTION_COUNT / 2) {  // > 180 degrees
-            return turnRight();
+        if (amount_turned >= DIRECTION_COUNT) {
+            // 360 turn
+            return false;
         }
     }
     // found amount to turn
-    int degrees = amount_turned * 45;
+    if (amount_turned > DIRECTION_COUNT / 2) {  // > 180 degrees
+        return turn(0 - direction);
+    }
+    int degreesLeft = amount_turned * 45 * direction;
 
     // make the turn
     facing = checking_direction;
-    movement->turnLeft(degrees);
+    movement->turn(degreesLeft);
 
     return true;
 }
 
+
+bool Navigation17::turnLeft() {
+    turn(1);
+}
+
 bool Navigation17::turnRight() {
-    // find the amount to turn
-    Direction checking_direction = (facing - 1) % DIRECTION_COUNT;
-    int amount_turned = 1;  // in octants
-    while (available_directions[checking_direction].t == 0 && available_directions[checking_direction].r == 0) {
-        checking_direction = (checking_direction - 1) % DIRECTION_COUNT;
-        ++amount_turned;
-
-        if (amount_turned > DIRECTION_COUNT / 2) {  // > 180 degrees
-            return turnLeft();
-        }
-    }
-    // found amount to turn
-    int degrees = amount_turned * 45;
-
-    // make the turn
-    facing = checking_direction;
-    movement->turnRight(degrees);
-
-    return true;
+    turn(-1);
 }
 
 bool Navigation17::goForward() {

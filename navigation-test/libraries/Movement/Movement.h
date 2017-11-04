@@ -31,7 +31,7 @@ public:
 	void performApproach(Approach approachType);
 	void performBackwardApproach(BackwardApproach approachType);
 	// Turn methods
-    // TODO: stop using these, make them private if we still need them, use the parameter ones
+    // TODO: stop using these, make them private if we really need them (I doubt we need them), use the parameter one
 	void turnLeft45() { Serial.println("Turning 45 deg to the left"); };
 	void turnRight45() { Serial.println("Turning 45 deg to the right"); };
 	void turnLeft90() { Serial.println("Turning 90 deg to the left"); };
@@ -40,16 +40,15 @@ public:
 	void turnRight135() { Serial.println("Turning 135 deg to the right"); };
 	void turnLeft180() { Serial.println("Turning 180 deg to the left"); };
 	void turnRight180() { Serial.println("Turning 180 deg to the right"); };
-    // use these
-	void turnLeft(const int& degrees) {
+    // use this
+    /** negative for right **/
+	void turn(const int& degreesLeft) {
         Serial.print("Turning ");
-        Serial.print(degrees);
-        Serial.println(" deg to the left");
-    }
-    void turnRight(const int& degrees) {
-        Serial.print("Turning ");
-        Serial.print(degrees);
-        Serial.println(" deg to the right");
+        Serial.print(abs(degreesLeft));
+        if (degreesLeft > 0)
+            Serial.println(" deg to the left");
+        else
+            Serial.println(" deg to the right");
     }
 	// Approach functions
 	void approachNoFollowUntilPerpendicularLine() { Serial.println("Not following line until perpendicular line is hit"); };
