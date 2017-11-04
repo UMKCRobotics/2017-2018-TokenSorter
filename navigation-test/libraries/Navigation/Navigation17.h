@@ -8,6 +8,8 @@ class Movement;
 
 class Navigation17 {
 private:
+    const static int MAX_R = 8;  // r coordinate for drop locations - TODO: verify
+
     Movement* movement;
     Coordinate current_position;
     Direction facing;

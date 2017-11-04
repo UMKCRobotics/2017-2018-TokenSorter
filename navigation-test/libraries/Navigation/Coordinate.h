@@ -28,7 +28,7 @@ public:
     Coordinate(const int& _t, const int& _r) : t(_t), r(_r) {}
 
     Coordinate operator+ (const Coordinate& other) {
-        return { t + other.t, r + other.r };
+        return { (t + other.t) % DIRECTION_COUNT, r + other.r };
     }
 
     String str() {

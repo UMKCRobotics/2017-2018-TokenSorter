@@ -3,19 +3,39 @@
 #include "Movement.h"
 
 void Navigation17::set_available_directions() {
+    // default
     for (int i = 0; i < DIRECTION_COUNT; ++i) {
+        // all directions are not available
         available_directions[i].t = 0;
         available_directions[i].r = 0;
     }
-    if (current_position.r > 0) {
-        // move counter-clockwise
-        // TODO: any other restrictions for moving around?
-        available_directions[((((current_position.t + 1) % DIRECTION_COUNT) / 2) + 1) * 2].t = 1;
-        // move clockwise
-        available_directions[(((current_position.t / 2) * 2) - 2) % DIRECTION_COUNT].t = -1;
-        // move out
-        // TODO: what's the limit for moving out?
-        if (current_position.r < 8) {
+
+    if (current_position.r > 0) {  // if not in the center
+        if (current_position.r < MAX_R) {  // if not on outer edge of board
+            // TODO: any other restrictions for moving around?
+            // move counter-clockwise
+            int counter_clockwise_direction = ((((current_position.t + 1) % DIRECTION_COUNT) / 2) + 1) * 2;
+            available_directions[counter_clockwise_direction].t = 1;
+            // don't stop on north or south
+            if (available_directions[counter_clockwise_direction].t == 1 &&
+                ((current_position.t + 1) % DIRECTION_COUNT == NORTH ||
+                 (current_position.t + 1) % DIRECTION_COUNT == SOUTH))
+            {
+                available_directions[counter_clockwise_direction].t = 2;
+            }
+
+            // move clockwise
+            int clockwise_direction = (((current_position.t / 2) * 2) - 2) % DIRECTION_COUNT;
+            available_directions[clockwise_direction].t = -1;
+            // don't stop on north or south
+            if (available_directions[clockwise_direction].t == -1 &&
+                ((current_position.t - 1) % DIRECTION_COUNT == NORTH ||
+                 (current_position.t - 1) % DIRECTION_COUNT == SOUTH))
+            {
+                available_directions[counter_clockwise_direction].t = -2;
+            }
+
+            // move out
             available_directions[current_position.t].r = 1;
         }
         // move in
