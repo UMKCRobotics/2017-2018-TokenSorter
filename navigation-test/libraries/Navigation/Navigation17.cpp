@@ -12,48 +12,58 @@ void Navigation17::set_available_directions() {
     }
 
     if (current_position.r > 0) {  // if not in the center
-        if (current_position.r < MAX_R) {  // if not on outer edge of board
-            // can move around clockwise or counter clockwise
-            // TODO: any other restrictions for moving around?
+        if (current_position.r < MAX_R) {
+            // not on outer edge of board
+            if (current_position.r < (MAX_R - 1) && current_position.r > 1) {
+                // can move around clockwise or counter clockwise
+                // TODO: any other restrictions for moving around?
+                Serial.println("in moving around areas - cw and ccw");
 
-            // move counter-clockwise
-            int counter_clockwise_direction = ((((current_position.t + 1) % DIRECTION_COUNT) / 2) + 1) * 2;
-            available_directions[counter_clockwise_direction].t = 1;
-            // don't stop on north or south
-            if (available_directions[counter_clockwise_direction].t == 1 &&
-                ((current_position.t + 1) % DIRECTION_COUNT == NORTH ||
-                 (current_position.t + 1) % DIRECTION_COUNT == SOUTH))
-            {
-                available_directions[counter_clockwise_direction].t = 2;
-            }
-            // approaches moving counter clockwise
-            if ((current_position.t + available_directions[counter_clockwise_direction].t) % 2) {
-                // approaching odd direction counter clockwise
-                approaches[counter_clockwise_direction] = FollowOnLeftUntilCrossesLine;  // TODO: verify
+
+                // move counter-clockwise
+                int counter_clockwise_direction = ((((current_position.t + 1) % DIRECTION_COUNT) / 2) + 1) * 2;
+                available_directions[counter_clockwise_direction].t = 1;
+                // don't stop on north or south
+                if (available_directions[counter_clockwise_direction].t == 1 &&
+                    ((current_position.t + 1) % DIRECTION_COUNT == NORTH ||
+                     (current_position.t + 1) % DIRECTION_COUNT == SOUTH)) {
+                    available_directions[counter_clockwise_direction].t = 2;
+                }
+                // approaches moving counter clockwise
+                if ((current_position.t + available_directions[counter_clockwise_direction].t) % 2) {
+                    // approaching odd direction counter clockwise
+                    approaches[counter_clockwise_direction] = FollowOnLeftUntilCrossesLine;  // TODO: verify
+                } else {
+                    // approaching even direction
+                    approaches[counter_clockwise_direction] = FollowUntilPerpendicularLine;  // TODO: verify
+                }
+
+
+                // move clockwise
+                int clockwise_direction = (((current_position.t / 2) * 2) - 2) % DIRECTION_COUNT;
+                Serial.print("clockwise direction: ");
+                Serial.println(clockwise_direction);
+                available_directions[clockwise_direction].t = -1;
+                // don't stop on north or south
+                if (available_directions[clockwise_direction].t == -1 &&
+                    ((current_position.t - 1) % DIRECTION_COUNT == NORTH ||
+                     (current_position.t - 1) % DIRECTION_COUNT == SOUTH)) {
+                    available_directions[counter_clockwise_direction].t = -2;
+                }
+                // approaches moving clockwise
+                if ((current_position.t + available_directions[clockwise_direction].t) % 2) {
+                    // approaching odd direction clockwise
+                    approaches[counter_clockwise_direction] = FollowOnRightUntilCrossesLine;  // TODO: verify
+                } else {
+                    // approaching even direction
+                    approaches[counter_clockwise_direction] = FollowUntilPerpendicularLine;  // TODO: verify
+                }
+
             }
             else {
-                // approaching even direction
-                approaches[counter_clockwise_direction] = FollowUntilPerpendicularLine;  // TODO: verify
-            }
-
-            // move clockwise
-            int clockwise_direction = (((current_position.t / 2) * 2) - 2) % DIRECTION_COUNT;
-            available_directions[clockwise_direction].t = -1;
-            // don't stop on north or south
-            if (available_directions[clockwise_direction].t == -1 &&
-                ((current_position.t - 1) % DIRECTION_COUNT == NORTH ||
-                 (current_position.t - 1) % DIRECTION_COUNT == SOUTH))
-            {
-                available_directions[counter_clockwise_direction].t = -2;
-            }
-            // approaches moving clockwise
-            if ((current_position.t + available_directions[clockwise_direction].t) % 2) {
-                // approaching odd direction clockwise
-                approaches[counter_clockwise_direction] = FollowOnRightUntilCrossesLine;  // TODO: verify
-            }
-            else {
-                // approaching even direction
-                approaches[counter_clockwise_direction] = FollowUntilPerpendicularLine;  // TODO: verify
+                // this is entrances to all the drop areas (r = 1 and r = MAX - 1)
+                // TODO: special approach code goes here maybe, actually probably not
+                // or it will be overwritten in the move out and move in sections
             }
 
             // move out
@@ -84,6 +94,13 @@ void Navigation17::set_available_directions() {
                 approaches[WEST] = FollowUntilPerpendicularLine;  // TODO: verify
             }
         }
+        // except at extreme r when there are drop positions
+        if (current_position.r == MAX_R - 1) {
+            approaches[current_position.t] = MoveIntoDropPosition;  // TODO: could be start area, but why would that be different?
+        }
+        else if (current_position.r == 1) {
+            approaches[in_direction] = MoveIntoDropPosition;
+        }
     }
     else {  // r == 0, center of the board
         current_position.t = 0;
@@ -93,7 +110,7 @@ void Navigation17::set_available_directions() {
             available_directions[i].r = 1;
         }
 
-        /* if we don't want to allow turning in the middle
+        /* TODO: decide: if we don't want to allow turning in the middle
          * delete that for loop and just use this
         available_directions[facing].t = facing;
         available_directions[facing].r = 1;
@@ -102,15 +119,15 @@ void Navigation17::set_available_directions() {
         // TODO: approaches from center
     }
 
-    // TODO: special cases for approaches
+    // TODO: any other special cases for approaches?
 }
 
 bool Navigation17::turn(const int& direction) {
     // find the amount to turn
-    Direction checking_direction = (facing + direction) % DIRECTION_COUNT;
+    Direction checking_direction = Direction((facing + direction) % DIRECTION_COUNT);
     int amount_turned = 1;  // in octants
     while (available_directions[checking_direction].t == 0 && available_directions[checking_direction].r == 0) {
-        checking_direction = (checking_direction + direction) % DIRECTION_COUNT;
+        checking_direction = Direction((checking_direction + direction) % DIRECTION_COUNT);
         ++amount_turned;
 
         if (amount_turned >= DIRECTION_COUNT) {
@@ -173,7 +190,7 @@ String Navigation17::getCurrentStateInfo() {
         if (available_directions[i].t == 0 && available_directions[i].r == 0) {
             continue;
         }
-        paths += DIRECTION_NAMES[i] + String(approaches[i]) + "\n";
+        paths = paths + DIRECTION_NAMES[i] + " " + String(approaches[i]) + "\n";
     }
-    return "at " + current_position.str() + " facing " + String(facing) + "\n" + paths;
+    return "at " + current_position.str() + " facing " + DIRECTION_NAMES[facing] + "\n" + paths;
 }

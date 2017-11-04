@@ -15,7 +15,7 @@ enum Direction {
     DIRECTION_COUNT = 8
 };
 
-const char DIRECTION_NAMES[DIRECTION_COUNT][10] = {
+const char DIRECTION_NAMES[DIRECTION_COUNT + 1][10] = {
         "EAST",
         "NORTHEAST",
         "NORTH",
@@ -27,8 +27,8 @@ const char DIRECTION_NAMES[DIRECTION_COUNT][10] = {
         "COUNT"
 };
 
-Direction opposite(const Direction& t) {
-    return (t + (DIRECTION_COUNT / 2)) % DIRECTION_COUNT;
+static Direction opposite(const Direction& t) {
+    return Direction((t + (DIRECTION_COUNT / 2)) % DIRECTION_COUNT);
 }
 
 /** polar coordinates (octant, number of lines from center) **/
@@ -37,6 +37,7 @@ public:
     int t;
     int r;
 
+    Coordinate() : t(), r() {}
     Coordinate(const int& _t, const int& _r) : t(_t), r(_r) {}
 
     Coordinate operator+ (const Coordinate& other) {

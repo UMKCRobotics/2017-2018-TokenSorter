@@ -1,18 +1,24 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 #include "Arduino.h"
-#include "ScrapController.h"
+// #include "ScrapController.h"
 
 /// namespace to access Turn and Approach enumerations
 namespace moveOptions {
 	enum Turn { Left45=1, Right45, Left90, Right90, Left135, Right135, Left180, Right180 };
 	enum Approach {
         NoApproach=0,
-		NoFollowUntilPerpendicularLine=1, FollowUntilPerpendicularLine, FollowUntilTokenSlot,
-		FollowOnLeftUntilPerpendicularLine, FollowOnRightUntilPerpendicularLine,
-		FollowOnLeftUntilCrossesLine, FollowOnRightUntilCrossesLine,
-		FollowUntilCrossingY, FollowUntilSeparatingY,
-		MoveIntoStart, MoveIntoDropPosition
+		NoFollowUntilPerpendicularLine=1,
+        FollowUntilPerpendicularLine,  // 2
+        FollowUntilTokenSlot,
+		FollowOnLeftUntilPerpendicularLine,
+        FollowOnRightUntilPerpendicularLine,  // 5
+		FollowOnLeftUntilCrossesLine,
+        FollowOnRightUntilCrossesLine,
+		FollowUntilCrossingY,
+        FollowUntilSeparatingY,  // 9
+		MoveIntoStart,
+        MoveIntoDropPosition
 	};
 	enum BackwardApproach {
 		BackwardLeaveDropPosition=1,
