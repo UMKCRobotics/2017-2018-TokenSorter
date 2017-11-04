@@ -33,6 +33,9 @@ set(SOURCE_FILES
         navigation-test/libraries/ScrapController/ScrapMotor.cpp
         navigation-test/libraries/ScrapController/ScrapMotorControl.cpp
         navigation-test/sketch/sketch.ino
-        navigation-test/jno.jno)
+        navigation-test/jno.jno
+        navigation-test/libraries/Navigation/Navigation17.cpp
+        navigation-test/libraries/Navigation/Navigation17.h
+        navigation-test/libraries/Navigation/Coordinate.h)
 
 add_executable(2017_2018_TokenSorter ${SOURCE_FILES})

@@ -95,11 +95,23 @@ void ScrapMotorControl::performMovement() {
 		int powChange = 0;
 		// change power according to proportion of speeds
 		if (currSpeed < speedGoal) {
-			powChange = (int)mapFloat(speedGoal/currSpeed,1.0,2.0,1.0,6.0);
+			// avoid division by zero
+			if (currSpeed != 0) {
+				powChange = (int)mapFloat(speedGoal/currSpeed,1.0,2.0,1.0,6.0);
+			}
+			else {
+				powChange = 6;
+			}
 			motor->setPower(max(minPower,motor->getPower()+powChange));
 		}
 		else if (currSpeed > speedGoal) {
-			powChange = (int)mapFloat(currSpeed/speedGoal,1.0,2.0,1.0,6.0);
+			// avoid division by zero
+			if (currSpeed != 0) {
+				powChange = (int)mapFloat(currSpeed/speedGoal,1.0,2.0,1.0,6.0);
+			}
+			else {
+				powChange = 6;
+			}
 			motor->setPower(max(minPower,motor->getPower()-powChange));
 		}
 	}

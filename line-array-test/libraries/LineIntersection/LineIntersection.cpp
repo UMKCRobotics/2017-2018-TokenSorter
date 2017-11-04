@@ -1,54 +1,17 @@
-#include "Wire.h"
-#include "sensorbar.h"
-
-#define BYTE_SIZE 8
-
-#define INTERSECTION_I 10
-#define INTERSECTION_II 20
-#define INTERSECTION_III 30
-#define INTERSECTION_IV 40
-#define INTERSECTION_V 50
-
-#define NO_LINE -1
-#define VERTICAL_LINE 0
-#define DIAGONAL_LINE 1
-#define VERT_AND_DIAG_LINE 2
-#define HORIZONTAL_LINE 3
-#define SENSOR_ERROR 99
-
-const uint8_t SX1509_ADDRESS = /*Line array address needs to be defined*/;
-
-class LineIntersection{
-	private:
-		//Class type pulled from example code.
-		SensorBar mySensorBar(SX1509_ADDRESS);
-		uint8_t line_byte;
-		int8_t line_byte_array[8];
-		int8_t line_density;
-		//int8_t intersection_counter;
-
-
-	public:
-		LineIntersection();
-		int8_t checkIntersection();
-		int8_t determineHalf(string left_or_right);
-		int8_t countOnes(int8_t start, int8_t end);
-		void setLineDensity();
-		void setLineByte();
-		void convertLineByteIntoArray();
-};
+#include "LineIntersection.h"
 
 LineIntersection::LineIntersection()
 {
-	mySensorBar.clearBarStrobe();
-	mySensorBar.clearInvertBits();
-	mySensorBar.begin();
-	setLineByte();
+	mySensorBar = new SensorBar(0x3E);
+	mySensorBar->clearBarStrobe();
+	mySensorBar->clearInvertBits();
+	mySensorBar->begin();
+	//setLineByte();
 }
 
 //TODO: Add all different intersection types.
 
-int8_t LineIntersection::checkIntersection()
+/*int8_t LineIntersection::checkIntersection()
 {
 	//intersection_count++;
 	int8_t left_line, right_line;
@@ -77,7 +40,7 @@ int8_t LineIntersection::checkIntersection()
 
 //NOTE: For diagonal lines, the sensor cannot differentiate between y=x and y=-x diagonals, so we will need a workaround.
 
-int8_t LineIntersection::determineHalf(string left_or_right)
+int8_t LineIntersection::determineHalf(String left_or_right)
 {
 	int8_t sensor_line_count;
 	if (left_or_right == "left"){
@@ -109,7 +72,32 @@ void LineIntersection::setLineByte()
 	line_byte = mySensorBar.getRaw(); //Gets the 8 values as a uint8_t (binary form).
 	convertLineByteIntoArray();
 }
-
+*/
+String LineIntersection::getArrayDataInString() {
+	String lineData = "";
+	uint8_t binary_array;
+	int8_t right_shift;
+	int bit_value;
+	//get data
+	line_byte = mySensorBar->getRaw();
+	
+	for (int8_t i = BYTE_SIZE-1; i >= 0; i--){
+		//binary_array = line_byte;
+		//binary_array << i; //Remove anything to the left.
+		//binary_array >> (BYTE_SIZE - 1); //Move it all the way to the rightmost position.
+		bit_value = bitRead(line_byte,i);
+		if (bit_value == 1){ //TOCHECK: The unsigned 8-bit int8_t is read as decimal in any non-bitwise operation, correct?
+			//line_byte_array[i] = 1;
+			lineData += "1";
+		}
+		else {
+			//line_byte_array[i] = 0;
+			lineData += "0";
+		}
+	}
+	return lineData;
+}
+/*
 void LineIntersection::convertLineByteIntoArray()
 {
 	uint8_t binary_array;
@@ -146,3 +134,4 @@ int8_t LineIntersection::countOnes(int8_t start, int8_t end) //Non-inclusive of 
 	}
 	return ones_counter;
 }
+*/
