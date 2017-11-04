@@ -15,6 +15,18 @@ enum Direction {
     DIRECTION_COUNT = 8
 };
 
+const char DIRECTION_NAMES[DIRECTION_COUNT][10] = {
+        "EAST",
+        "NORTHEAST",
+        "NORTH",
+        "NORTHWEST",
+        "WEST",
+        "SOUTHWEST",
+        "SOUTH",
+        "SOUTHEAST",
+        "COUNT"
+};
+
 Direction opposite(const Direction& t) {
     return (t + (DIRECTION_COUNT / 2)) % DIRECTION_COUNT;
 }

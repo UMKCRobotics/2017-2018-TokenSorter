@@ -168,5 +168,12 @@ bool Navigation17::goBackward() {
 }
 
 String Navigation17::getCurrentStateInfo() {
-    return "at " + current_position.str() + " facing " + String(facing);
+    String paths = "directions and approaches:\n";
+    for (int i = 0; i < DIRECTION_COUNT; ++i) {
+        if (available_directions[i].t == 0 && available_directions[i].r == 0) {
+            continue;
+        }
+        paths += DIRECTION_NAMES[i] + String(approaches[i]) + "\n";
+    }
+    return "at " + current_position.str() + " facing " + String(facing) + "\n" + paths;
 }
