@@ -2,7 +2,7 @@
 
 LineIntersection::LineIntersection()
 {
-	mySensorBar = new SensorBar(0x3E);
+	mySensorBar = new SensorBar(SX1509_ADDRESS);
 	mySensorBar->clearBarStrobe();
 	mySensorBar->clearInvertBits();
 	mySensorBar->begin();
@@ -74,46 +74,42 @@ void LineIntersection::setLineByte()
 }
 */
 String LineIntersection::getArrayDataInString() {
-	String lineData = "";
-	uint8_t binary_array;
-	int8_t right_shift;
+	String lineData = '';
 	int bit_value;
-	//get data
+	// get data
 	line_byte = mySensorBar->getRaw();
-	
-	for (int8_t i = BYTE_SIZE-1; i >= 0; i--){
-		//binary_array = line_byte;
-		//binary_array << i; //Remove anything to the left.
-		//binary_array >> (BYTE_SIZE - 1); //Move it all the way to the rightmost position.
+
+	for (int8_t i = BYTE_SIZE-1; i >= 0; i--) {
 		bit_value = bitRead(line_byte,i);
-		if (bit_value == 1){ //TOCHECK: The unsigned 8-bit int8_t is read as decimal in any non-bitwise operation, correct?
-			//line_byte_array[i] = 1;
-			lineData += "1";
-		}
-		else {
-			//line_byte_array[i] = 0;
-			lineData += "0";
-		}
+		// if (bit_value == 1){
+		// 	lineData += "1";
+		// }
+		// else {
+		// 	lineData += "0";
+		// }
+		lineData += (bit_value ? '1' : '0')
 	}
 	return lineData;
 }
-/*
-void LineIntersection::convertLineByteIntoArray()
-{
-	uint8_t binary_array;
-	int8_t right_shift;
-	for (int8_t i = 0; i < BYTE_SIZE; i++){
-		binary_array = line_byte;
-		binary_array << i; //Remove anything to the left.
-		binary_array >> (BYTE_SIZE - 1); //Move it all the way to the rightmost position.
-		if (binary_array == 1){ //TOCHECK: The unsigned 8-bit int8_t is read as decimal in any non-bitwise operation, correct?
-			line_byte_array[i] = 1;
+
+int8_t getArrayDataSum() {
+	line_data = getArrayDataInString();
+	int8_t data_sum_vector = 0;
+	for (int8_t i = BYTE_SIZE-1; i >= 0; i--) {
+		/* Choose the most readable option. */
+		// binary_value = (int8_t) line_data[i]
+		// if (binary_value) {
+		// 	data_sum_vector += binary_value * (i >= 4 ? 1 : -1)
+		// }
+		if (line_data[i] == '1' && i >= 4) {
+			data_sum_vector++;
 		}
-		else {
-			line_byte_array[i] = 0;
+		else if (line_data[i] == '1') { // Implying that i <= 3.
+			data_sum_vector--;
 		}
 	}
 }
+/*
 
 void LineIntersection::setLineDensity(int8_t user_density = 0)
 {
