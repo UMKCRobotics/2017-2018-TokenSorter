@@ -51,3 +51,17 @@ void setup() {
 void loop() {
 
 }
+
+
+void initEncoders() {
+	attachInterrupt(digitalPinToInterrupt(ENCODER_LEFT_INT),checkEncoderL,CHANGE);
+	attachInterrupt(digitalPinToInterrupt(ENCODER_RIGHT_INT),checkEncoderR,CHANGE);
+}
+
+void checkEncoderL() {
+	encoderL.checkEncoderFlipped();
+}
+
+void checkEncoderR() {
+	encoderR.checkEncoder();
+}
