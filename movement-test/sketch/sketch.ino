@@ -28,8 +28,13 @@ ScrapMotorControl motorControlR = ScrapMotorControl(motorR, encoderR);
 unsigned long currentTime;
 unsigned long previousTime;
 
+SensorBar lineSensor = new SensorBar(0x3E);
+
 
 void setup() {
+	lineSensor.clearBarStrobe();
+	lineSensor.clearInvertBits();
+	lineSensor.begin();
 	motorControlL.setMinPower(35);
 	motorControlR.setMinPower(45);
 	motorControlL.setMinSpeed(160);
@@ -50,13 +55,20 @@ void setup() {
 
 void loop() {
 	if (Serial.available()) {
-		
+		followLineUntilPerpendicular();
 	}
 	while (Serial.available()) {
 		Serial.read();
 		delay(1);
 	}
 	delay(1);
+}
+
+void followLineUntilPerpendicular() {
+	while (lineSensor.getDensity() < 3) {
+		int position = lineSensor.getPosition();
+		Serial.println(position);
+	}
 }
 
 
