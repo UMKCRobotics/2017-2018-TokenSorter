@@ -49,7 +49,14 @@ void setup() {
 
 
 void loop() {
-
+	if (Serial.available()) {
+		
+	}
+	while (Serial.available()) {
+		Serial.read();
+		delay(1);
+	}
+	delay(1);
 }
 
 
