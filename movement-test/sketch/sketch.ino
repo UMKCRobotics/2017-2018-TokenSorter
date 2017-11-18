@@ -1,4 +1,5 @@
 #include "ScrapController.h"
+#include "sensorbar.h"
 
 #define ENCODER_LEFT_INT 4
 #define ENCODER_LEFT_DIG 5
@@ -28,13 +29,14 @@ ScrapMotorControl motorControlR = ScrapMotorControl(motorR, encoderR);
 unsigned long currentTime;
 unsigned long previousTime;
 
-SensorBar lineSensor = new SensorBar(0x3E);
+SensorBar* lineSensor;
 
 
 void setup() {
-	lineSensor.clearBarStrobe();
-	lineSensor.clearInvertBits();
-	lineSensor.begin();
+	lineSensor = new SensorBar(0x3E);
+	lineSensor->clearBarStrobe();
+	lineSensor->clearInvertBits();
+	lineSensor->begin();
 	motorControlL.setMinPower(35);
 	motorControlR.setMinPower(45);
 	motorControlL.setMinSpeed(160);
@@ -65,10 +67,11 @@ void loop() {
 }
 
 void followLineUntilPerpendicular() {
-	while (lineSensor.getDensity() < 3) {
-		int position = lineSensor.getPosition();
+	while (lineSensor->getDensity() < 3) {
+		int position = lineSensor->getPosition();
 		Serial.println(position);
 	}
+	Serial.println("DONE");
 }
 
 
