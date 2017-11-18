@@ -67,11 +67,23 @@ void loop() {
 }
 
 void followLineUntilPerpendicular() {
+	int normalSpeed = 1500;
+	int offset = 0;
+	motorControlL.setControl(normalSpeed);
+	motorControlR.setControl(normalSpeed);
 	while (lineSensor->getDensity() < 3) {
 		int position = lineSensor->getPosition();
 		Serial.println(position);
+		offset = map(position, -127, 127, -300,300);
+		motorControlL.setControl(normalSpeed-offset);
+		motorControlR.setControl(normalSpeed+offset);
+		motorControlL.performMovement();
+		motorControlR.performMovement();
+
 	}
 	Serial.println("DONE");
+	motorControlL.stop();
+	motorControlR.stop();
 }
 
 
