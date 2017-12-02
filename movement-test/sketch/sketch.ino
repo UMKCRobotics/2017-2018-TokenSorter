@@ -9,6 +9,7 @@
 #define MOTOR_LEFT_PWM 8
 #define MOTOR_RIGHT_D 11
 #define MOTOR_RIGHT_PWM 10
+#define LINESENSOR 33
 
 
 
@@ -44,6 +45,7 @@ void setup() {
 	motorControlR.setMinSpeed(160);
 	motorControlR.setMaxSpeed(1800);
 	initEncoders();
+	pinMode(LINESENSOR, INPUT);
 	//motorControlL.stop();
 	//motorControlR.stop();
 	motorControlL.setControl(1800);
@@ -54,6 +56,9 @@ void setup() {
 	unsigned long previousTime = millis();
 }
 
+int getIfMiddleLine() {
+	return analogRead(LINESENSOR) > 900;
+}
 
 void loop() {
 	if (Serial.available()) {
@@ -80,9 +85,17 @@ void followLineUntilPerpendicular() {
 		}
 		
 		//Serial.println(position);
-		offset = map(pow(last_nonzero_position/6,2), -127, 127, -600,600);
-		if (last_nonzero_position < 0) {
-			offset = -offset;
+		if (!getIfMiddleLine()) {
+			offset = map(pow(last_nonzero_position/6,2), -127, 127, -600,600);
+			if (last_nonzero_position < 0) {
+				offset = -offset;
+			}
+		}
+		else {
+			offset = map(pow(last_nonzero_position/2,2), -127, 127, -600,600);
+			if (last_nonzero_position < 0) {
+				offset = -offset;
+			}
 		}
 		Serial.println(offset);
 		motorControlL.setControl(normalSpeed+offset);
