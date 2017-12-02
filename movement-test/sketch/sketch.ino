@@ -92,10 +92,15 @@ void followLineUntilPerpendicular() {
 			}
 		}
 		else {
-			offset = map(pow(last_nonzero_position/2,2), -127, 127, -600,600);
-			if (last_nonzero_position < 0) {
-				offset = -offset;
+			if (position) {
+				offset = map(pow(log(abs(last_nonzero_position))/log(2),3)/128, -1, 1, -600,600);
+				if (last_nonzero_position < 0) {
+					offset = -offset;
+				}
 			}
+			else {
+				offset = 0;
+			} 
 		}
 		Serial.println(offset);
 		motorControlL.setControl(normalSpeed+offset);
