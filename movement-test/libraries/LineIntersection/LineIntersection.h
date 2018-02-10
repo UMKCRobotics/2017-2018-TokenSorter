@@ -41,8 +41,8 @@ class LineIntersection{
 		// void setLineDensity();
 		// void setLineByte();
 		// void convertLineByteIntoArray();
-		int8_t getArrayDataSum();
 		String getArrayDataInString();
+		int8_t getArrayDataSum();
 };
 
 #endif

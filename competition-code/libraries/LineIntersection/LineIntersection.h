@@ -28,6 +28,14 @@ class LineIntersection{
 		uint8_t SX1509_ADDRESS = 0x3E;
 		SensorBar* mySensorBar;
 		uint8_t line_byte;
+
+		String lastFullReading = "000000000";
+		int lastPosition = 0;
+		int density = 0;
+		int middlePin;
+		int middleThreshold = 850;
+		const char ON_LINE = '1';
+		const char OFF_LINE = '0';
 		// int8_t line_byte_array[8];
 		// int8_t line_density;
 		//int8_t intersection_counter;
@@ -35,14 +43,20 @@ class LineIntersection{
 
 	public:
 		LineIntersection();
+		LineIntersection(int pin);
 		// int8_t checkIntersection();
 		// int8_t determineHalf(String left_or_right);
 		// int8_t countOnes(int8_t start, int8_t end);
 		// void setLineDensity();
 		// void setLineByte();
 		// void convertLineByteIntoArray();
+		int getDensity() { return density; };
+
+		bool getMiddleState();
 		int8_t getArrayDataSum();
 		String getArrayDataInString();
+		String getFullArrayInString();
+		int getLinePosition(bool getNewData = false);
 };
 
 #endif

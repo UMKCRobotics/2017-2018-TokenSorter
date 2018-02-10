@@ -2,11 +2,20 @@
 
 LineIntersection::LineIntersection()
 {
+
+
+}
+
+
+LineIntersection::LineIntersection(int pin) {
 	mySensorBar = new SensorBar(SX1509_ADDRESS);
 	mySensorBar->clearBarStrobe();
 	mySensorBar->clearInvertBits();
 	mySensorBar->begin();
 	//setLineByte();
+
+	// set middlePin
+	middlePin = pin;
 }
 
 //TODO: Add all different intersection types.
@@ -74,26 +83,24 @@ void LineIntersection::setLineByte()
 }
 */
 String LineIntersection::getArrayDataInString() {
-	String lineData = '';
+	String lineData = "";
 	int bit_value;
 	// get data
 	line_byte = mySensorBar->getRaw();
 
 	for (int8_t i = BYTE_SIZE-1; i >= 0; i--) {
 		bit_value = bitRead(line_byte,i);
-		// if (bit_value == 1){
-		// 	lineData += "1";
-		// }
-		// else {
-		// 	lineData += "0";
-		// }
-		lineData += (bit_value ? '1' : '0')
+		lineData += (bit_value ? ON_LINE : OFF_LINE);
 	}
 	return lineData;
 }
 
-int8_t getArrayDataSum() {
-	line_data = getArrayDataInString();
+bool LineIntersection::getMiddleState() {
+	return analogRead(middlePin) >= middleThreshold;
+}
+
+int8_t LineIntersection::getArrayDataSum() {
+	String line_data = getArrayDataInString();
 	int8_t data_sum_vector = 0;
 	for (int8_t i = BYTE_SIZE-1; i >= 0; i--) {
 		/* Choose the most readable option. */
@@ -101,14 +108,82 @@ int8_t getArrayDataSum() {
 		// if (binary_value) {
 		// 	data_sum_vector += binary_value * (i >= 4 ? 1 : -1)
 		// }
-		if (line_data[i] == '1' && i >= 4) {
+		if (line_data[i] == ON_LINE && i >= 4) {
 			data_sum_vector++;
 		}
-		else if (line_data[i] == '1') { // Implying that i <= 3.
+		else if (line_data[i] == ON_LINE) { // Implying that i <= 3.
 			data_sum_vector--;
 		}
 	}
 }
+
+
+String LineIntersection::getFullArrayInString() {
+	String lineData = "";
+	density = 0;
+	int bit_value;
+	// get data
+	line_byte = mySensorBar->getRaw();
+
+	for (int8_t i = BYTE_SIZE-1; i >= 0; i--) {
+		bit_value = bitRead(line_byte,i);
+		/*if (bit_value) {
+			lineData += 
+		}*/
+		lineData += (bit_value ? ON_LINE : OFF_LINE);
+		density += bit_value;
+		if (i == 4) {
+			bool state = getMiddleState();
+			lineData += (getMiddleState() ? ON_LINE : OFF_LINE);
+			density += state;
+		}
+
+	}
+	lastFullReading = lineData;
+	return lineData;
+}
+
+
+int LineIntersection::getLinePosition(bool getNewData) {
+	int position = 0;
+	// get new data if requested
+	if (getNewData) {
+		getFullArrayInString();
+	}
+	if (lastFullReading[4] == ON_LINE) {
+		// if on the line, only worry about closest two sensors
+		if (lastFullReading[3] == ON_LINE) position -= 1;
+		if (lastFullReading[5] == ON_LINE) position += 1;
+	}
+	else {
+		// otherwise, worry about all
+		if (lastFullReading[3] == ON_LINE || lastFullReading[5] == ON_LINE) {
+			if (lastFullReading[3] == ON_LINE) position -= 4;
+			if (lastFullReading[5] == ON_LINE) position += 4;
+		}
+		else if (lastFullReading[2] == ON_LINE || lastFullReading[6] == ON_LINE) {
+			if (lastFullReading[2] == ON_LINE) position -= 8;
+			if (lastFullReading[6] == ON_LINE) position += 8;
+		}
+		else if (lastFullReading[1] == ON_LINE || lastFullReading[7] == ON_LINE) {
+			if (lastFullReading[1] == ON_LINE) position -= 12;
+			if (lastFullReading[7] == ON_LINE) position += 12;
+		}
+		else if (lastFullReading[0] == ON_LINE || lastFullReading[8] == ON_LINE) {
+			if (lastFullReading[0] == ON_LINE) position -= 16;
+			if (lastFullReading[8] == ON_LINE) position += 16;
+		}
+		// remember last position if no IRs are on_line
+		if (position == 0) {
+			position = lastPosition;
+		}
+	}
+	// set lastPosition to most recent position
+	lastPosition = position;
+	return lastPosition;
+}
+
+
 /*
 
 void LineIntersection::setLineDensity(int8_t user_density = 0)
