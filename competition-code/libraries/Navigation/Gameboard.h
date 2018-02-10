@@ -13,7 +13,7 @@ class Gameboard
 private:
 	IntersectionState* startState = nullptr;
 	Movement* movement;
-	int round;
+	int round = 1;
 	void initializeBoard();
 public:
 	Gameboard(int round_n, Movement* move);

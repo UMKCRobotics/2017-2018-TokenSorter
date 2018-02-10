@@ -185,6 +185,45 @@ void Gameboard::initializeBoard() {
 
 	// set a start state for the gameboard (going "To" A from center)
 	startState = dropOuterand270->getStateA()->To;
+
+	switch(round) {
+		case 4: // tiebreaker; nothing here
+		case 3: {
+			at5and0->setIfToken(true);
+			at5and45->setIfToken(true);
+			at5and90->setIfToken(true);
+			at5and135->setIfToken(true);
+			at5and180->setIfToken(true);
+			at5and225->setIfToken(true);
+			at5and270->setIfToken(true);
+			at5and315->setIfToken(true);
+		}
+		case 2: {
+			at4and0->setIfToken(true);
+			at4and45->setIfToken(true);
+			at4and90->setIfToken(true);
+			at4and135->setIfToken(true);
+			at4and180->setIfToken(true);
+			at4and225->setIfToken(true);
+			at4and270->setIfToken(true);
+			at4and315->setIfToken(true);
+		}
+		default: {
+			at2and0->setIfToken(true);
+			at2and45->setIfToken(true);
+			at2and135->setIfToken(true);
+			at2and180->setIfToken(true);
+			at2and225->setIfToken(true);
+			at2and315->setIfToken(true);
+			at3and0->setIfToken(true);
+			at3and45->setIfToken(true);
+			at3and135->setIfToken(true);
+			at3and180->setIfToken(true);
+			at3and225->setIfToken(true);
+			at3and315->setIfToken(true);
+			break;
+		}	
+	}
 }
 
 
