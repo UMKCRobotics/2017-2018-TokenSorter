@@ -2,7 +2,7 @@
 #include "LineIntersection.h"
 //#include "TunnelRobot.h"
 //#include "Navigation.h"
-//#include "Movement.h"
+#include "Movement.h"
 //#include "ColorSensor.h"
 //#include "RoundSwitch.h"
 //#include "GoStopButtons.h"
@@ -43,5 +43,7 @@ void loop() {
 	Serial.print("\t");
 	Serial.print(line->getDensity());
 	Serial.print("\t");
-	Serial.println(line->getLinePosition());
+	Serial.print(line->getLinePosition());
+	Serial.print("\t");
+	Serial.println(line->getIfAtCrossingY());
 }

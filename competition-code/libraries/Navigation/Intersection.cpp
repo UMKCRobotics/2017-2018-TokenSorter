@@ -10,14 +10,14 @@ Intersection::Intersection(Movement* move, String name = "def inter name") {
 	stateC = new IntersectionStatePair;
 	stateD = new IntersectionStatePair;
 	// assign states to state pairs
-	stateA->To = new IntersectionState(move, this, "A[To]");
-	stateA->From = new IntersectionState(move, this, "A[From]");
-	stateB->To = new IntersectionState(move, this, "B[To]");
-	stateB->From = new IntersectionState(move, this, "B[From]");
-	stateC->To = new IntersectionState(move, this, "C[To]");
-	stateC->From = new IntersectionState(move, this, "C[From]");
-	stateD->To = new IntersectionState(move, this, "D[To]");
-	stateD->From = new IntersectionState(move, this, "D[From]");
+	stateA->To = new IntersectionState(move, this, "A[T]");
+	stateA->From = new IntersectionState(move, this, "A[F]");
+	stateB->To = new IntersectionState(move, this, "B[T]");
+	stateB->From = new IntersectionState(move, this, "B[F]");
+	stateC->To = new IntersectionState(move, this, "C[T]");
+	stateC->From = new IntersectionState(move, this, "C[F]");
+	stateD->To = new IntersectionState(move, this, "D[T]");
+	stateD->From = new IntersectionState(move, this, "D[F]");
 	movement = move;
 	intersectName = name;
 }

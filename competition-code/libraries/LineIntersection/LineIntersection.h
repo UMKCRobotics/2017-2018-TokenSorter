@@ -57,6 +57,12 @@ class LineIntersection{
 		String getArrayDataInString();
 		String getFullArrayInString();
 		int getLinePosition(bool getNewData = false);
+		// Line Intersection Detection functions
+		bool getIfAtPerpendicular();
+		bool getIfAtSeparatingY();
+		bool getIfAtCrossingY();
+		bool getIfAtRightY();
+		bool getIfAtLeftY();
 };
 
 #endif

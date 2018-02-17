@@ -52,6 +52,8 @@ int8_t LineIntersection::getArrayDataSum() {
 }
 
 
+
+
 String LineIntersection::getFullArrayInString() {
 	String lineData = "";
 	density = 0;
@@ -113,3 +115,31 @@ int LineIntersection::getLinePosition(bool getNewData) {
 	lastPosition = position;
 	return lastPosition;
 }
+
+
+bool LineIntersection::getIfAtPerpendicular() {
+	int required_density = 5;
+	return getDensity() >= required_density;
+}
+
+
+bool LineIntersection::getIfAtSeparatingY() {
+	return (lastFullReading[2] == ON_LINE && lastFullReading[6] == ON_LINE)
+			|| (lastFullReading[1] == ON_LINE && lastFullReading[7] == ON_LINE);
+}
+
+
+bool LineIntersection::getIfAtCrossingY() {
+	return getIfAtSeparatingY();
+}
+
+
+bool LineIntersection::getIfAtRightY() {
+	return getIfAtPerpendicular();
+}
+
+
+bool LineIntersection::getIfAtLeftY() {
+	return getIfAtPerpendicular();
+}
+
