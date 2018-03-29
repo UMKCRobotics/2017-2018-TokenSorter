@@ -34,8 +34,8 @@
 ScrapEncoder leftEncoder = ScrapEncoder(ENC_INT_LEFT,ENC_CHECK_LEFT);
 ScrapEncoder rightEncoder = ScrapEncoder(ENC_INT_RIGHT,ENC_CHECK_RIGHT);
 // define Movement component
-
-
+ScrapMotorSinglePin leftMotor = ScrapMotorSinglePin(DIR_LEFT,PWM_LEFT);
+ScrapMotorSinglePin rightMotor = ScrapMotorSinglePin(DIR_RIGHT,PWM_RIGHT);
 // define Navigation component
 
 
@@ -57,10 +57,15 @@ void setup() {
 	pinMode(DIR_RIGHT,OUTPUT);
 	pinMode(PWM_LEFT,OUTPUT);
 	pinMode(PWM_RIGHT,OUTPUT);
-	digitalWrite(DIR_LEFT,LOW);
-	digitalWrite(DIR_RIGHT,LOW);
-	digitalWrite(PWM_LEFT,LOW);
-	digitalWrite(PWM_RIGHT,LOW);
+	leftMotor.setMotor(255);
+	rightMotor.setMotor(255);
+	delay(1000);
+	leftMotor.stop();
+	rightMotor.stop();
+	//digitalWrite(DIR_LEFT,HIGH);
+	//digitalWrite(DIR_RIGHT,LOW);
+	//digitalWrite(PWM_LEFT,HIGH);
+	//digitalWrite(PWM_RIGHT,HIGH);
 }
 
 
