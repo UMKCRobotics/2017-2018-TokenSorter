@@ -57,11 +57,7 @@ void setup() {
 	pinMode(DIR_RIGHT,OUTPUT);
 	pinMode(PWM_LEFT,OUTPUT);
 	pinMode(PWM_RIGHT,OUTPUT);
-	leftMotor.setMotor(255);
-	rightMotor.setMotor(255);
-	delay(1000);
-	leftMotor.stop();
-	rightMotor.stop();
+	
 	//digitalWrite(DIR_LEFT,HIGH);
 	//digitalWrite(DIR_RIGHT,LOW);
 	//digitalWrite(PWM_LEFT,HIGH);
@@ -87,6 +83,11 @@ void loop() {
 	Serial.print(line->getLinePosition());
 	Serial.print("\t");
 	Serial.println(line->getIfAtCrossingY());
+	leftMotor.setMotor(255);
+	rightMotor.setMotor(255);
+	delay(1000);
+	leftMotor.stop();
+	rightMotor.stop();
 	//Serial.println(leftMotor.getPower());
 	//Serial.println(rightMotor.getPower());
 	//leftMotor.stop();
