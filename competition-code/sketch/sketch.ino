@@ -35,7 +35,7 @@ ScrapEncoder leftEncoder = ScrapEncoder(ENC_INT_LEFT,ENC_CHECK_LEFT);
 ScrapEncoder rightEncoder = ScrapEncoder(ENC_INT_RIGHT,ENC_CHECK_RIGHT);
 // define Movement component
 ScrapMotorSinglePin leftMotor = ScrapMotorSinglePin(DIR_LEFT,PWM_LEFT);
-ScrapMotorSinglePin rightMotor = ScrapMotorSinglePin(DIR_RIGHT,PWM_RIGHT);
+ScrapMotorSinglePin rightMotor = ScrapMotorSinglePin(DIR_RIGHT,PWM_RIGHT,-1);
 // define Navigation component
 
 
@@ -74,7 +74,7 @@ void initializePins() {
 
 void loop() {
 	delay(200);
-	Serial.print(line->getMiddleState());
+	/*Serial.print(line->getMiddleState());
 	Serial.print("\t");
 	Serial.print(line->getFullArrayInString());
 	Serial.print("\t");
@@ -82,12 +82,16 @@ void loop() {
 	Serial.print("\t");
 	Serial.print(line->getLinePosition());
 	Serial.print("\t");
-	Serial.println(line->getIfAtCrossingY());
-	leftMotor.setMotor(255);
-	rightMotor.setMotor(255);
+	Serial.println(line->getIfAtCrossingY());*/
+	
+	leftMotor.setMotor(120);
+	rightMotor.setMotor(120);
 	delay(1000);
 	leftMotor.stop();
 	rightMotor.stop();
+	Serial.print(leftEncoder.getCount());
+	Serial.print("\t");
+	Serial.println(rightEncoder.getCount());
 	//Serial.println(leftMotor.getPower());
 	//Serial.println(rightMotor.getPower());
 	//leftMotor.stop();
