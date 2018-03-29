@@ -48,6 +48,7 @@ LineIntersection* line;
 
 void setup() {
 	// Start serial for debugging purposes
+	initEncoders();
 	Serial.begin(9600);
 	Serial.println("serial started");
 	line = new LineIntersection(MIDDLE_IR_PIN);
@@ -96,4 +97,17 @@ void loop() {
 	//Serial.println(rightMotor.getPower());
 	//leftMotor.stop();
 	//rightMotor.stop();
+}
+
+void initEncoders() {
+	attachInterrupt(digitalPinToInterrupt(ENC_INT_LEFT),checkEncoderL,CHANGE);
+	attachInterrupt(digitalPinToInterrupt(ENC_INT_RIGHT),checkEncoderR,CHANGE);
+}
+
+void checkEncoderL() {
+	leftEncoder.checkEncoderFlipped();
+}
+
+void checkEncoderR() {
+	rightEncoder.checkEncoder();
 }
