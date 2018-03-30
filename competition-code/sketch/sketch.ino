@@ -80,7 +80,8 @@ void setup() {
 	dualController.setMinEncSpeed(180);
 	dualController.setMaxEncSpeed(2200);
 	dualController.setSpeedBalance(30);
-	dualController.set(16000,-16000);
+	dualController.initControllers();
+	dualController.set(4000);
 }
 
 

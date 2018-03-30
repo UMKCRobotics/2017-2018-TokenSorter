@@ -26,6 +26,15 @@ ScrapDualController::ScrapDualController(ScrapMotor& mot1, ScrapMotor& mot2, Scr
 	stop();
 }
 
+void ScrapDualController::initControllers() {
+	speedControl1->setMinPower(minSlowPower1);
+	speedControl1->setMinSpeed(minEncSpeed);
+	speedControl1->setMaxSpeed(maxEncSpeed);
+	speedControl2->setMinPower(minSlowPower2);
+	speedControl2->setMinSpeed(minEncSpeed);
+	speedControl2->setMaxSpeed(maxEncSpeed);
+}
+
 // move back until switches are activated
 bool ScrapDualController::performReset() {
 	speedControl1->stop();
@@ -162,7 +171,7 @@ void ScrapDualController::balanceSpeed() {
 	}
 	// otherwise, make speeds match if possible
 	else {
-		if (speedControl1->getSpeedGoal() != 0 && speedControl1->getSpeedGoal() != 0) {
+		if (speedControl1->getSpeedGoal() != 0 && speedControl2->getSpeedGoal() != 0) {
 			common_speed = (speedControl1->getSpeedGoal() + speedControl2->getSpeedGoal())/2.0;
 			speedControl1->setSpeed(common_speed);
 			speedControl2->setSpeed(common_speed);

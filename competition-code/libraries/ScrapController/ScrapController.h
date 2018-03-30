@@ -268,6 +268,7 @@ class ScrapDualController: public ScrapControllerInterface {
 		ScrapDualController(ScrapMotorControl& motorControl1, ScrapMotorControl& motorControl2);
 		ScrapDualController(ScrapMotor& mot1, ScrapMotor& mot2, ScrapEncoder& enc1, ScrapEncoder& enc2);
 		ScrapDualController(ScrapMotor& mot1, ScrapMotor& mot2, ScrapEncoder& enc1, ScrapEncoder& enc2, ScrapSwitch& swi1, ScrapSwitch& swi2);
+		virtual void initControllers(); // apply constants to motor controllers
 		// get/set encoder goals
 		virtual bool set(long g1, long g2);
 		virtual bool set(long goal);
