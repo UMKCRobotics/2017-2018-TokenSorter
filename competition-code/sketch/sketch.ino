@@ -40,6 +40,7 @@ ScrapMotorSinglePin rightMotor = ScrapMotorSinglePin(DIR_RIGHT,PWM_RIGHT,-1);
 
 ScrapMotorControl leftMotorControl = ScrapMotorControl(leftMotor,leftEncoder);
 ScrapMotorControl rightMotorControl = ScrapMotorControl(rightMotor,rightEncoder);
+ScrapDualController dualController = ScrapDualController(leftMotorControl,rightMotorControl);
 // define Navigation component
 
 // SLOWEST = 180
@@ -47,6 +48,7 @@ ScrapMotorControl rightMotorControl = ScrapMotorControl(rightMotor,rightEncoder)
 
 // define TunnelRobot here
 
+int modifier = 1;
 
 LineIntersection* line;
 
@@ -66,10 +68,11 @@ void setup() {
 	//linear.write(120);
 	servo.write(180);
 	digitalWrite(EM_RELAY,HIGH);
-	leftMotorControl.setControl(0);
-	rightMotorControl.setControl(0);
+	//leftMotorControl.setControl(0);
+	//rightMotorControl.setControl(0);
 	//leftMotor.setMotor(30);
 	//rightMotor.setMotor(30);
+	dualController.setGoal(16000,-16000)
 }
 
 
@@ -86,8 +89,13 @@ void loop() {
 	Serial.println("ayylmao12");
 	leftEncoder.resetCount();
 	rightEncoder.resetCount()*/
-	leftMotorControl.performMovement();
-	rightMotorControl.performMovement();
+	if (dualController.performMovement()) {
+		dualController.shiftCount();
+		modifier *= -1;
+		dualController.setGoal(16000*modifier,-16000*modifier)
+	}
+	//leftMotorControl.performMovement();
+	//rightMotorControl.performMovement();
 	/*Serial.print(line->getMiddleState());
 	Serial.print("\t");
 	Serial.print(line->getFullArrayInString());
