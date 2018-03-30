@@ -49,6 +49,7 @@ ScrapDualController dualController = ScrapDualController(leftMotorControl,rightM
 // define TunnelRobot here
 
 int modifier = 1;
+int counter = 0;
 
 LineIntersection* line;
 
@@ -73,15 +74,15 @@ void setup() {
 	//leftMotor.setMotor(30);
 	//rightMotor.setMotor(30);
 	// CONFIGURE DUAL CONTROLLER
-	dualController.setDiffTolerance(20);
-	dualController.setEncTolerance(20);
+	dualController.setDiffTolerance(50);
+	dualController.setEncTolerance(50);
 	dualController.setSlowdownThresh(500);
-	dualController.setMinSlowPower(35);
-	dualController.setMinEncSpeed(180);
-	dualController.setMaxEncSpeed(2200);
+	dualController.setMinSlowPower(40);
+	dualController.setMinEncSpeed(200);
+	dualController.setMaxEncSpeed(2000);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
-	dualController.set(4000);
+	dualController.set(4000,-4000);
 }
 
 
@@ -91,7 +92,8 @@ void initializePins() {
 
 
 void loop() {
-	delay(2);/*
+	delay(2);
+	counter++;/*
 	Serial.print(leftEncoder.getCount());
 	Serial.print("\t");
 	Serial.println(rightEncoder.getCount());
@@ -100,8 +102,15 @@ void loop() {
 	rightEncoder.resetCount()*/
 	if (dualController.performMovement()) {
 		dualController.shiftCount();
-		modifier *= -1;
-		dualController.set(16000*modifier,-16000*modifier);
+		dualController.set(4000,-4000);
+	}
+	else {
+		if (counter >= 51) {
+			counter = 0;
+			Serial.print(dualController.getDiff1());
+			Serial.print("\t");
+			Serial.println(dualController.getDiff2());
+		}
 	}
 	//leftMotorControl.performMovement();
 	//rightMotorControl.performMovement();
