@@ -320,6 +320,7 @@ class ScrapDualController: public ScrapControllerInterface {
 		virtual void setMinSlowPower1(int power) { minSlowPower1 = power; };
 		virtual void setMinSlowPower2(int power) { minSlowPower2 = power; };
 		virtual void setMinSlowPower(int power) { setMinSlowPower1(power); setMinSlowPower2(power); };
+		virtual void setBalanceSpeed(float speed) { balanceSpeed = speed; };
 };
 
 

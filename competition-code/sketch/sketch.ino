@@ -79,6 +79,7 @@ void setup() {
 	dualController.setMinSlowPower(35);
 	dualController.setMinEncSpeed(180);
 	dualController.setMaxEncSpeed(2200);
+	dualController.setBalanceSpeed(30);
 	dualController.set(16000,-16000);
 }
 
