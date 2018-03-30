@@ -3,6 +3,7 @@
 //#include "TunnelRobot.h"
 //#include "Navigation.h"
 #include "Movement.h"
+#include "Servo.h"
 //#include "ColorSensor.h"
 //#include "RoundSwitch.h"
 //#include "GoStopButtons.h"
@@ -41,35 +42,50 @@ ScrapMotorControl leftMotorControl = ScrapMotorControl(leftMotor,leftEncoder);
 ScrapMotorControl rightMotorControl = ScrapMotorControl(rightMotor,rightEncoder);
 // define Navigation component
 
+// SLOWEST = 180
+// FASTEST = 2200
 
 // define TunnelRobot here
 
 
 LineIntersection* line;
 
-
+Servo linear;
+Servo servo;
 
 void setup() {
 	// Start serial for debugging purposes
 	initEncoders();
+	initializePins();
 	Serial.begin(9600);
 	Serial.println("serial started");
 	line = new LineIntersection(MIDDLE_IR_PIN);
-	
-	leftMotorControl.setControl(1000);
-	rightMotorControl.setControl(-500);
+	linear.attach(ARM_LINEAR);
+	servo.attach(ARM_SERVO);
+	linear.write(40);
+	//linear.write(120);
+	servo.write(180);
+	digitalWrite(EM_RELAY,HIGH);
+	leftMotorControl.setControl(0);
+	rightMotorControl.setControl(0);
+	//leftMotor.setMotor(30);
+	//rightMotor.setMotor(30);
 }
 
 
 void initializePins() {
 	pinMode(EM_RELAY,OUTPUT);
-	pinMode(ARM_LINEAR,OUTPUT);
-	pinMode(ARM_SERVO,OUTPUT);
 }
 
 
 void loop() {
-	delay(2);
+	delay(2);/*
+	Serial.print(leftEncoder.getCount());
+	Serial.print("\t");
+	Serial.println(rightEncoder.getCount());
+	Serial.println("ayylmao12");
+	leftEncoder.resetCount();
+	rightEncoder.resetCount()*/
 	leftMotorControl.performMovement();
 	rightMotorControl.performMovement();
 	/*Serial.print(line->getMiddleState());
