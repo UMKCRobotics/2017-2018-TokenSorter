@@ -72,7 +72,7 @@ void setup() {
 	//rightMotorControl.setControl(0);
 	//leftMotor.setMotor(30);
 	//rightMotor.setMotor(30);
-	dualController.setGoal(16000,-16000)
+	dualController.set(16000,-16000);
 }
 
 
@@ -92,7 +92,7 @@ void loop() {
 	if (dualController.performMovement()) {
 		dualController.shiftCount();
 		modifier *= -1;
-		dualController.setGoal(16000*modifier,-16000*modifier)
+		dualController.set(16000*modifier,-16000*modifier);
 	}
 	//leftMotorControl.performMovement();
 	//rightMotorControl.performMovement();
