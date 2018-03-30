@@ -207,7 +207,7 @@ class ScrapControllerInterface {
 		virtual void setSlowdownThresh(long thresh) { slowdownThresh = thresh; };
 		virtual void setMinSlowPower(int power) { minSlowPower = power; };
 		virtual void setMinEncSpeed(float speed) { minEncSpeed = speed; };
-		virtual void setMaxSpeedEnc(float speed) { maxEncSpeed = speed; };
+		virtual void setMaxEncSpeed(float speed) { maxEncSpeed = speed; };
 };
 
 
