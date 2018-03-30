@@ -72,6 +72,11 @@ void setup() {
 	//rightMotorControl.setControl(0);
 	//leftMotor.setMotor(30);
 	//rightMotor.setMotor(30);
+	// CONFIGURE DUAL CONTROLLER
+	dualController.setDiffTolerance(20);
+	dualController.setEncTolerance(20);
+	dualController.setSlowdownThresh(500);
+	dualController.setMinSlowPower(35);
 	dualController.set(16000,-16000);
 }
 
