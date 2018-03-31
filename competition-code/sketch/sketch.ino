@@ -82,7 +82,7 @@ void setup() {
 	dualController.setMaxEncSpeed(2000);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
-	dualController.set(4000,-4000);
+	//dualController.set(0,0);
 }
 
 
@@ -93,25 +93,21 @@ void initializePins() {
 
 void loop() {
 	delay(2);
-	counter++;/*
-	Serial.print(leftEncoder.getCount());
-	Serial.print("\t");
-	Serial.println(rightEncoder.getCount());
-	Serial.println("ayylmao12");
-	leftEncoder.resetCount();
-	rightEncoder.resetCount()*/
-	if (dualController.performMovement()) {
-		dualController.shiftCount();
-		dualController.set(4000,-4000);
-	}
-	else {
-		if (counter >= 51) {
-			counter = 0;
-			Serial.print(dualController.getDiff1());
-			Serial.print("\t");
-			Serial.println(dualController.getDiff2());
-		}
-	}
+	//counter++;
+	//if (dualController.performMovement()) {
+	//	delay(1000);
+	//}	
+	//if (dualController.performMovement()) {
+	//	
+	//}
+	//else {
+	//	if (counter >= 51) {
+	//		counter = 0;
+	//		Serial.print(dualController.getDiff1());
+	//		Serial.print("\t");
+	//		Serial.println(dualController.getDiff2());
+	//	}
+	//}
 	//leftMotorControl.performMovement();
 	//rightMotorControl.performMovement();
 	/*Serial.print(line->getMiddleState());
@@ -123,22 +119,6 @@ void loop() {
 	Serial.print(line->getLinePosition());
 	Serial.print("\t");
 	Serial.println(line->getIfAtCrossingY());*/
-	
-	/*leftMotor.setMotor(120);
-	rightMotor.setMotor(120);
-	delay(1000);
-	leftMotor.stop();
-	rightMotor.stop();
-	Serial.print(leftEncoder.getCount());
-	Serial.print("\t");
-	Serial.println(rightEncoder.getCount());*/
-
-
-
-	//Serial.println(leftMotor.getPower());
-	//Serial.println(rightMotor.getPower());
-	//leftMotor.stop();
-	//rightMotor.stop();
 }
 
 void initEncoders() {
