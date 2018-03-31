@@ -43,7 +43,7 @@ public:
 	// getters
 	String getName() { return intersectName; };
 	bool getIfToken() { return hasToken; };
-	bool setIfToken(bool token) { hasToken = token; };
+	void setIfToken(bool token) { hasToken = token; };
 	IntersectionStatePair* getStateA() { return stateA; };
 	IntersectionStatePair* getStateB() { return stateB; };
 	IntersectionStatePair* getStateC() { return stateC; };

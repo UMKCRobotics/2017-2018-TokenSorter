@@ -1,12 +1,13 @@
 #include "ScrapController.h"
 #include "LineIntersection.h"
-//#include "TunnelRobot.h"
-//#include "Navigation.h"
+#include "Navigation.h"
 #include "Movement.h"
 #include "Servo.h"
-//#include "ColorSensor.h"
-//#include "RoundSwitch.h"
-//#include "GoStopButtons.h"
+#include "Arm.h"
+#include "ColorSensor.h"
+#include "RoundSwitch.h"
+#include "Gameboard.h"
+#include "Buttons.h"
 
 
 // define necessary constants here (pins)
@@ -46,8 +47,6 @@ ScrapDualController dualController = ScrapDualController(leftMotorControl,rightM
 // SLOWEST = 180
 // FASTEST = 2200
 
-// define TunnelRobot here
-
 int modifier = 1;
 int counter = 0;
 
@@ -78,8 +77,8 @@ void setup() {
 	dualController.setEncTolerance(50);
 	dualController.setSlowdownThresh(500);
 	dualController.setMinSlowPower(40);
-	dualController.setMinEncSpeed(200);
-	dualController.setMaxEncSpeed(2000);
+	dualController.setMinEncSpeed(180);
+	dualController.setMaxEncSpeed(2200);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
 	//dualController.set(0,0);

@@ -86,25 +86,25 @@ IntersectionI::IntersectionI(Movement* move, String name) : Intersection(move, n
 	// setup states To/From A
 	stateA->To -> setLeftTurn(Left135, stateB->To);
 	stateA->To -> setRightTurn(Right135, stateD->To);
-	stateA->From -> setApproach(FollowUntilTokenSlot);
+	stateA->From -> setApproach(FollowUntilPerpendicularLine);
 	stateA->From -> setBackwardApproach(BackwardFollowUntilSeparatingY);
 	// setup states To/From B
 	stateB->To -> setLeftTurn(Left45, stateC->To);
 	stateB->To -> setRightTurn(Right135, stateA->To);
 	stateB->From -> setLeftTurn(Left45, stateA->To);
 	stateB->From -> setRightTurn(Right90, stateD->To);
-	stateB->From -> setApproach(FollowUntilTokenSlot);
+	stateB->From -> setApproach(FollowUntilPerpendicularLine);
 	// setup states To/From C
 	stateC->To -> setLeftTurn(Left45, stateD->To);
 	stateC->To -> setRightTurn(Right45, stateB->To);
-	stateC->From -> setApproach(FollowUntilTokenSlot);
+	stateC->From -> setApproach(FollowUntilPerpendicularLine);
 	stateC->From -> setBackwardApproach(BackwardFollowUntilCrossingY);
 	// setup states To/From D
 	stateD->To -> setLeftTurn(Left135, stateA->To);
 	stateD->To -> setRightTurn(Right45, stateC->To);
 	stateD->From -> setLeftTurn(Left90, stateB->To);
 	stateD->From -> setRightTurn(Right45, stateA->To);
-	stateD->From -> setApproach(FollowUntilTokenSlot);
+	stateD->From -> setApproach(FollowUntilPerpendicularLine);
 	// set appropriate transitions
 	stateA->From -> setTransitionTo(stateC->To);
 	stateA->From -> setBackwardTransitionTo(stateA->To);
@@ -129,21 +129,21 @@ IntersectionII::IntersectionII(Movement* move, String name) : Intersection(move,
 	// setup state To A
 	stateA->To -> setLeftTurn(Left90, stateB->To);
 	stateA->To -> setRightTurn(Right90, stateD->To);
-	stateA->From -> setApproach(FollowUntilTokenSlot);
+	stateA->From -> setApproach(FollowUntilPerpendicularLine);
 	stateA->From -> setBackwardApproach(BackwardFollowUntilPerpendicularLine);
 	// setup state To B
 	stateB->To -> setLeftTurn(Left90, stateC->To);
 	stateB->To -> setRightTurn(Right90, stateA->To);
-	stateB->From -> setApproach(FollowUntilTokenSlot);
+	stateB->From -> setApproach(FollowUntilPerpendicularLine);
 	// setup state To C
 	stateC->To -> setLeftTurn(Left90, stateD->To);
 	stateC->To -> setRightTurn(Right90, stateB->To);
-	stateC->From -> setApproach(FollowUntilTokenSlot);
+	stateC->From -> setApproach(FollowUntilPerpendicularLine);
 	stateC->From -> setBackwardApproach(BackwardFollowUntilPerpendicularLine);
 	// setup state To D
 	stateD->To -> setLeftTurn(Left90, stateA->To);
 	stateD->To -> setRightTurn(Right90, stateC->To);
-	stateD->From -> setApproach(FollowUntilTokenSlot);
+	stateD->From -> setApproach(FollowUntilPerpendicularLine);
 	// set appropriate transitions
 	stateA->From -> setTransitionTo(stateC->To);
 	stateA->From -> setBackwardTransitionTo(stateA->To);

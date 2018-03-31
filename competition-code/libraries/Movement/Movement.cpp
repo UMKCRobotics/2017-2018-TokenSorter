@@ -5,6 +5,10 @@ Movement::Movement()
 {
 }
 
+Movement::Movement(ScrapDualController& dualController, LineIntersection& lineIntersection) {
+	attachController(dualController);
+	attachLineIntersection(lineIntersection);
+}
 
 Movement::~Movement()
 {
@@ -85,9 +89,6 @@ void Movement::performApproach(Approach approachType) {
 	}
 }
 
-void Movement::approachFollowUntilPerpendicularLine() {
-	
-}
 
 void Movement::performBackwardApproach(BackwardApproach approachType) {
 	switch (approachType) {
@@ -108,3 +109,77 @@ void Movement::performBackwardApproach(BackwardApproach approachType) {
 		break;
 	}
 }
+
+void Movement::turnTillEncoderValue(long encoderCount) {
+	// set appropriate goals
+	controller->set(-encoderCount,encoderCount);
+	// perform movement until goal is reached
+	while (!controller->performMovement()) {
+		delay(2);
+	}
+	// stop the motors
+	controller->stop();
+	// shift the encoder counts so they are relative to goal
+	controller->shiftCount();
+}
+
+// TURNING COMMANDS
+void Movement::turnLeft45() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+void Movement::turnRight45() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+void Movement::turnLeft90() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+void Movement::turnRight90() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+void Movement::turnLeft135() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+void Movement::turnRight135() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+void Movement::turnLeft180() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+void Movement::turnRight180() {
+	long encoderCount = 0;
+	turnTillEncoderValue(encoderCount);
+}
+
+// FORWARD APPROACH COMMANDS
+void Movement::approachNoFollowUntilPerpendicularLine() {
+	// Go forward some amount until a perpendicular line is reached
+	controller->set(3000);
+	while(!controller->performMovement() || !line->getIfAtPerpendicular()) {
+		delay(2);
+	}
+	controller->stop();
+	controller->shiftCount();
+	// TO-DO: maybe line up robot with line
+}
+
+void Movement::approachFollowUntilPerpendicularLine() {
+	// Go forward while following line, until perpendicular line is reached
+}
+
+
+
+// BACKWARD APPROACH COMMANDS

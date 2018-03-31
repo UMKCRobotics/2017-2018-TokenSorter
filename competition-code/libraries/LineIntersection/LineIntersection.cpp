@@ -38,22 +38,6 @@ bool LineIntersection::getMiddleState() {
 }
 
 
-int8_t LineIntersection::getArrayDataSum() {
-	String line_data = getArrayDataInString();
-	int8_t data_sum_vector = 0;
-	for (int8_t i = BYTE_SIZE-1; i >= 0; i--) {
-		if (line_data[i] == ON_LINE && i >= 4) {
-			data_sum_vector++;
-		}
-		else if (line_data[i] == ON_LINE) { // Implying that i <= 3.
-			data_sum_vector--;
-		}
-	}
-}
-
-
-
-
 String LineIntersection::getFullArrayInString() {
 	String lineData = "";
 	density = 0;
