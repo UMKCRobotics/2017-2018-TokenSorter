@@ -162,11 +162,11 @@ void ScrapDualController::decrementSpeed(float speedDiff) {
 void ScrapDualController::balanceSpeed() {
 	float common_speed;
 	// if 1 too far ahead, balance power towards 2
-	if (abs((speedControl1->getCount() - speedControl2->getCount())*speedControl1->getDirection()) >= diffTolerance) {
+	if ((speedControl1->getCount() - speedControl2->getCount())*speedControl1->getDirection() >= diffTolerance) {
 		moveSpeedToward2(speedBalance);
 	}
 	// if 2 too far ahead, balance power towards 1
-	else if (abs((speedControl1->getCount() - speedControl2->getCount())*speedControl1->getDirection()) <= -diffTolerance) {
+	else if ((speedControl1->getCount() - speedControl2->getCount())*speedControl1->getDirection() <= -diffTolerance) {
 		moveSpeedToward1(speedBalance);
 	}
 	// otherwise, make speeds match if possible
