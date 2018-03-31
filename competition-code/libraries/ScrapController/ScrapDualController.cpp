@@ -196,9 +196,9 @@ bool ScrapDualController::checkIfDone() {
 }
 
 bool ScrapDualController::checkIfDone1() {
-	return (speedControl1->getCount() >= goal1 - encTolerance ) && (speedControl1->getCount() <= goal1 + encTolerance );
+	return (speedControl1->getCount() >= goal1 - encTolerance1 ) && (speedControl1->getCount() <= goal1 + encTolerance1);
 }
 
 bool ScrapDualController::checkIfDone2() {
-	return (speedControl2->getCount() >= goal2 - encTolerance ) && (speedControl2->getCount() <= goal2 + encTolerance );
+	return (speedControl2->getCount() >= goal2 - encTolerance2 ) && (speedControl2->getCount() <= goal2 + encTolerance2 );
 }

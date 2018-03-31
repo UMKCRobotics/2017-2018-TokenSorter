@@ -314,7 +314,7 @@ class ScrapDualController: public ScrapControllerInterface {
 		virtual void setDiffTolerance(long tolerance) { diffTolerance = tolerance; };
 		virtual void setEncTolerance1(long tolerance) { encTolerance1 = tolerance; };
 		virtual void setEncTolerance2(long tolerance) { encTolerance2 = tolerance; };
-		virtual void setEncTolerance(long tolerance) { setEncTolerance1(tolerance); setEncTolerance2(tolerance); };
+		virtual void setEncTolerance(long tolerance) { encTolerance = tolerance; setEncTolerance1(tolerance); setEncTolerance2(tolerance); };
 		virtual void setSlowdownThresh1(long thresh) { slowdownThresh1 = thresh; };
 		virtual void setSlowdownThresh2(long thresh) { slowdownThresh2 = thresh; };
 		virtual void setSlowdownThresh(long thresh) { setSlowdownThresh1(thresh); setSlowdownThresh2(thresh); };
