@@ -37,14 +37,14 @@ private:
 	LineIntersection* line;
 public:
 	Movement();
-	Movement(ScrapDualController& dualController, LineIntersection& lineIntersection);
+	Movement(ScrapDualController& dualController, LineIntersection* lineIntersection);
 	~Movement();
 	virtual void performTurn(Turn turnType);
 	virtual void performApproach(Approach approachType);
 	virtual void performBackwardApproach(BackwardApproach approachType);
 	// Attach components
 	virtual void attachController(ScrapDualController& dualController) { controller = &dualController; };
-	virtual void attachLineIntersection(LineIntersection& lineIntersection) { line = &lineIntersection; };
+	virtual void attachLineIntersection(LineIntersection* lineIntersection) { line = lineIntersection; };
 	// Turn methods
     // TODO: stop using these, make them private if we really need them (I doubt we need them), use the parameter one
 	virtual void turnLeft45();

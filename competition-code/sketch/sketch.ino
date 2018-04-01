@@ -52,6 +52,8 @@ int counter = 0;
 
 LineIntersection* line;
 
+Movement movement = Movement(dualController,line);
+
 Servo linear;
 Servo servo;
 
@@ -73,15 +75,15 @@ void setup() {
 	//leftMotor.setMotor(30);
 	//rightMotor.setMotor(30);
 	// CONFIGURE DUAL CONTROLLER
-	dualController.setDiffTolerance(50);
-	dualController.setEncTolerance(50);
+	dualController.setDiffTolerance(5);
+	dualController.setEncTolerance(5);
 	dualController.setSlowdownThresh(500);
 	dualController.setMinSlowPower(40);
 	dualController.setMinEncSpeed(180);
 	dualController.setMaxEncSpeed(2200);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
-	//dualController.set(0,0);
+	//dualController.set(2500,2500);
 }
 
 
@@ -91,7 +93,9 @@ void initializePins() {
 
 
 void loop() {
+	
 	delay(2);
+	dualController.performMovement();
 	//counter++;
 	//if (dualController.performMovement()) {
 	//	delay(1000);

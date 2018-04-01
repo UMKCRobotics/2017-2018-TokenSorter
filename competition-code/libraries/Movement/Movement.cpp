@@ -5,7 +5,7 @@ Movement::Movement()
 {
 }
 
-Movement::Movement(ScrapDualController& dualController, LineIntersection& lineIntersection) {
+Movement::Movement(ScrapDualController& dualController, LineIntersection* lineIntersection) {
 	attachController(dualController);
 	attachLineIntersection(lineIntersection);
 }
@@ -167,7 +167,7 @@ void Movement::turnRight180() {
 // FORWARD APPROACH COMMANDS
 void Movement::approachNoFollowUntilPerpendicularLine() {
 	// Go forward some amount until a perpendicular line is reached
-	controller->set(3000);
+	controller->set(2550);
 	while(!controller->performMovement() || !line->getIfAtPerpendicular()) {
 		delay(2);
 	}
