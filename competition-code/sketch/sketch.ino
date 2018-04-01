@@ -83,6 +83,12 @@ void setup() {
 	dualController.setMaxEncSpeed(2200);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
+	for (int i = 0; i<40; i++) {
+		line->getFullArrayInString();
+		delay(10);
+	}
+	delay(500);
+	movement.approachNoFollowUntilPerpendicularLine();
 	//dualController.set(2500,2500);
 }
 
@@ -92,8 +98,7 @@ void initializePins() {
 }
 
 
-void loop() {
-	
+void loop() {	
 	delay(2);
 	dualController.performMovement();
 	//counter++;

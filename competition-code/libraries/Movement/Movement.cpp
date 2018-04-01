@@ -168,11 +168,32 @@ void Movement::turnRight180() {
 void Movement::approachNoFollowUntilPerpendicularLine() {
 	// Go forward some amount until a perpendicular line is reached
 	controller->set(2550);
-	while(!controller->performMovement() || !line->getIfAtPerpendicular()) {
+	int perpCount = 0;
+	//for (int i = 0; i < 10; i++) {
+	//	line->getFullArrayInString();
+	//}
+	unsigned long time = millis();
+	while(!controller->performMovement()) {
+		if (line->getIfAtPerpendicular()) {
+			perpCount++;
+			if (perpCount >= 10) {
+			//	controller->resetCount();
+				break;
+			}//
+			//break;
+		}
+		else {
+			perpCount = 0;
+		}
+		if (millis()-time > 30) {
+			line->getFullArrayInString();
+			time = millis();
+		}
 		delay(2);
 	}
 	controller->stop();
-	controller->shiftCount();
+	controller->resetCount();
+	controller->set(0,0);
 	// TO-DO: maybe line up robot with line
 }
 
