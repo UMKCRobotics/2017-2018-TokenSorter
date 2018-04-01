@@ -70,20 +70,20 @@ public:
 	// Approach functions
 	virtual void approachNoFollowUntilPerpendicularLine();
 	virtual void approachFollowUntilPerpendicularLine();
-	virtual void approachFollowUntilTokenSlot();
-	virtual void approachFollowOnLeftUntilPerpendicularLine();
-	virtual void approachFollowOnRightUntilPerpendicularLine();
-	virtual void approachFollowOnLeftUntilCrossesLine();
-	virtual void approachFollowOnRightUntilCrossesLine();
-	virtual void approachFollowUntilCrossingY();
-	virtual void approachFollowUntilSeparatingY();
-	virtual void approachMoveIntoStart();
-	virtual void approachMoveIntoDropPosition();
+	virtual void approachFollowUntilTokenSlot() {};
+	virtual void approachFollowOnLeftUntilPerpendicularLine(){};
+	virtual void approachFollowOnRightUntilPerpendicularLine(){};
+	virtual void approachFollowOnLeftUntilCrossesLine(){};
+	virtual void approachFollowOnRightUntilCrossesLine(){};
+	virtual void approachFollowUntilCrossingY(){};
+	virtual void approachFollowUntilSeparatingY(){};
+	virtual void approachMoveIntoStart(){};
+	virtual void approachMoveIntoDropPosition(){};
 	// Backward Approach functions
-	virtual void approachBackwardLeaveDropPosition();
-	virtual void approachBackwardFollowUntilCrossingY();
-	virtual void approachBackwardFollowUntilSeparatingY();
-	virtual void approachBackwardFollowUntilPerpendicularLine();
+	virtual void approachBackwardLeaveDropPosition(){};
+	virtual void approachBackwardFollowUntilCrossingY(){};
+	virtual void approachBackwardFollowUntilSeparatingY(){};
+	virtual void approachBackwardFollowUntilPerpendicularLine(){};
 };
 
 
