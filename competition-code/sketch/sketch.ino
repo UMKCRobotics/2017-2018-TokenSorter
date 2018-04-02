@@ -85,13 +85,18 @@ void setup() {
 	dualController.setSlowdownThresh(500);
 	dualController.setMinSlowPower(40);
 	dualController.setMinEncSpeed(180);
-	dualController.setMaxEncSpeed(2200);
+	dualController.setMaxEncSpeed(1100);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
 	delay(500);
-	movement->approachNoFollowUntilPerpendicularLine();
+	//movement->approachNoFollowUntilPerpendicularLine();
 	//movement->turnLeft90();
 	//dualController.set(2500,2500);
+	navigation->goForward();
+	delay(1000);
+	navigation->goForward();
+	delay(1000);
+	navigation->goForward();
 }
 
 
