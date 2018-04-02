@@ -22,16 +22,14 @@ class LineIntersection{
 		int middleThreshold = 850;
 		const char ON_LINE = '1';
 		const char OFF_LINE = '0';
-		// int8_t line_byte_array[8];
-		// int8_t line_density;
-		//int8_t intersection_counter;
-
 
 	public:
 		LineIntersection();
 		LineIntersection(int pin);
 		int getDensity() { return density; };
-
+		// update sensor readings
+		void read() { getFullArrayInString(); }; // updates class variable
+		// other functions
 		bool getMiddleState();
 		String getArrayDataInString();
 		String getFullArrayInString();

@@ -180,13 +180,13 @@ void Movement::approachNoFollowUntilPerpendicularLine() {
 			//	controller->resetCount();
 				break;
 			}//
-			//break;
+			break;
 		}
 		else {
 			perpCount = 0;
 		}
 		if (millis()-time > 30) {
-			line->getFullArrayInString();
+			line->read();
 			time = millis();
 		}
 		delay(2);

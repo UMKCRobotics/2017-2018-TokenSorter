@@ -150,11 +150,11 @@ bool Navigation17::turn(const int& direction) {
 
 
 bool Navigation17::turnLeft() {
-    turn(1);
+    return turn(1);
 }
 
 bool Navigation17::turnRight() {
-    turn(-1);
+    return turn(-1);
 }
 
 // TODO: use approaches

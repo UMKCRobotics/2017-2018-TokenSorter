@@ -52,7 +52,7 @@ int counter = 0;
 
 LineIntersection* line;
 
-Movement movement = Movement(dualController,line);
+Movement* movement;
 
 Servo linear;
 Servo servo;
@@ -64,6 +64,7 @@ void setup() {
 	Serial.begin(9600);
 	Serial.println("serial started");
 	line = new LineIntersection(MIDDLE_IR_PIN);
+	movement = new Movement(dualController,line);
 	linear.attach(ARM_LINEAR);
 	servo.attach(ARM_SERVO);
 	linear.write(40);
@@ -83,12 +84,8 @@ void setup() {
 	dualController.setMaxEncSpeed(2200);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
-	for (int i = 0; i<40; i++) {
-		line->getFullArrayInString();
-		delay(10);
-	}
 	delay(500);
-	movement.approachNoFollowUntilPerpendicularLine();
+	movement->approachNoFollowUntilPerpendicularLine();
 	//dualController.set(2500,2500);
 }
 

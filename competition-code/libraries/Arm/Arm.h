@@ -11,7 +11,9 @@ namespace armOptions {
 		Yellow,
 		Magenta,
 		Cyan,
-		Gray
+		Gray,
+		Sensor,
+		Hole
 	};
 }
 
@@ -20,31 +22,32 @@ using namespace armOptions;
 
 struct ArmPosition {
 	int servo_position;
-	int count;
+	int count=0;
 };
 
 
 class Arm {
 	private:
+		// pins
 		int linear_pin;
 		int servo_pin;
 		int em_pin;
+		// servo classes for linear + servo
 		Servo linear;
 		Servo servo;
+		// state of electro magnet
 		bool em_state = false;
+		// current arm position
+		ArmPosition currentPosition;
+		int currentArmHeight;
 		// COLOR POSITIONS
-
+		ArmPosition position[9];
 	public:
 		Arm();
 		Arm(int linear, int servo, int em);
 		~Arm() {};
 
 };
-
-
-
-
-
 
 
 #endif
