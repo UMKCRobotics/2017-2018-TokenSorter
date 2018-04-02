@@ -135,7 +135,7 @@ void Movement::turnRight45() {
 }
 
 void Movement::turnLeft90() {
-	long encoderCount = 0;
+	long encoderCount = 2700;
 	turnTillEncoderValue(encoderCount);
 }
 
@@ -167,10 +167,16 @@ void Movement::turnRight180() {
 // FORWARD APPROACH COMMANDS
 void Movement::approachNoFollowUntilPerpendicularLine() {
 	// Go forward some amount until a perpendicular line is reached
+	bool onLine = line->getIfAtPerpendicular();
 	controller->set(2550);
 	unsigned long time = millis();
 	while(!controller->performMovement()) {
-		if (line->getIfAtPerpendicular()) {
+		if (onLine) {
+			if (!line->getIfAtPerpendicular()) {
+				onLine = false;
+			}
+		}
+		else if (line->getIfAtPerpendicular()) {
 			break;
 		}
 		if (millis()-time > 30) {

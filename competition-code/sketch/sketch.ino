@@ -88,7 +88,8 @@ void setup() {
 	dualController.initControllers();
 	delay(500);
 	firstReading = line->getFullArrayInString();
-	movement->approachNoFollowUntilPerpendicularLine();
+	//movement->approachNoFollowUntilPerpendicularLine();
+	movement->turnLeft90();
 	//dualController.set(2500,2500);
 }
 
