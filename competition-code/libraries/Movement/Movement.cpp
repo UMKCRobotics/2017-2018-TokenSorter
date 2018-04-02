@@ -168,22 +168,10 @@ void Movement::turnRight180() {
 void Movement::approachNoFollowUntilPerpendicularLine() {
 	// Go forward some amount until a perpendicular line is reached
 	controller->set(2550);
-	int perpCount = 0;
-	//for (int i = 0; i < 10; i++) {
-	//	line->getFullArrayInString();
-	//}
 	unsigned long time = millis();
 	while(!controller->performMovement()) {
 		if (line->getIfAtPerpendicular()) {
-			perpCount++;
-			if (perpCount >= 10) {
-			//	controller->resetCount();
-				break;
-			}//
 			break;
-		}
-		else {
-			perpCount = 0;
 		}
 		if (millis()-time > 30) {
 			line->read();

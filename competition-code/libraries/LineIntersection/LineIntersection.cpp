@@ -12,10 +12,10 @@ LineIntersection::LineIntersection(int pin) {
 	mySensorBar->clearBarStrobe();
 	mySensorBar->clearInvertBits();
 	mySensorBar->begin();
-	//setLineByte();
-
 	// set middlePin
 	middlePin = pin;
+	// get a first reading
+	read();
 }
 
 

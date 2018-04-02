@@ -57,6 +57,8 @@ Movement* movement;
 Servo linear;
 Servo servo;
 
+String firstReading;
+
 void setup() {
 	// Start serial for debugging purposes
 	initEncoders();
@@ -85,6 +87,7 @@ void setup() {
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
 	delay(500);
+	firstReading = line->getFullArrayInString();
 	movement->approachNoFollowUntilPerpendicularLine();
 	//dualController.set(2500,2500);
 }
@@ -98,6 +101,7 @@ void initializePins() {
 void loop() {	
 	delay(2);
 	dualController.performMovement();
+	Serial.println(firstReading);
 	//counter++;
 	//if (dualController.performMovement()) {
 	//	delay(1000);
