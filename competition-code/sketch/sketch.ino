@@ -101,7 +101,6 @@ void initializePins() {
 void loop() {	
 	delay(2);
 	dualController.performMovement();
-	Serial.println(firstReading);
 	//counter++;
 	//if (dualController.performMovement()) {
 	//	delay(1000);

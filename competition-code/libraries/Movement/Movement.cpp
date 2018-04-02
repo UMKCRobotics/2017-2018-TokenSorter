@@ -180,8 +180,8 @@ void Movement::approachNoFollowUntilPerpendicularLine() {
 		delay(2);
 	}
 	controller->stop();
-	controller->resetCount();
-	controller->set(0,0);
+	controller->set(controller->getCount());
+	controller->shiftCount();
 	// TO-DO: maybe line up robot with line
 }
 
