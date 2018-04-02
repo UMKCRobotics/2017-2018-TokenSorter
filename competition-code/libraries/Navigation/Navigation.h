@@ -18,7 +18,7 @@ private:
 	Movement* movement;
 public:
 	Navigation() {};
-	Navigation(int round_n, Movement& move);
+	Navigation(int round_n, Movement* move);
 	~Navigation();
 	bool turnLeft();
 	bool turnRight();

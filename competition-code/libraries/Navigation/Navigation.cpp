@@ -1,9 +1,9 @@
 #include "Navigation.h"
 
 
-Navigation::Navigation(int round_n, Movement& move)
+Navigation::Navigation(int round_n, Movement* move)
 {
-	movement = &move; //save pointer
+	movement = move; //save pointer
 	//IntersectionStart intersectionStart = IntersectionStart(movement, "Test Intersection");
 	//currentState = &intersectionStart.getStateA()[Intersection::To];
 	gameboard = new Gameboard(round_n, movement); //create gameboard
