@@ -28,6 +28,9 @@
 #define ENC_INT_RIGHT 2
 #define ENC_CHECK_LEFT 5 
 #define ENC_CHECK_RIGHT 3 
+// BUTTON PINS
+#define GO_PIN 27
+#define STOP_PIN 26
 
 // define Scrap components here (motors, encoders, motor speed controls, etc)
 //ScrapMotorSinglePin leftMotor = ScrapMotorSinglePin(DIR_LEFT,PWM_LEFT);
@@ -42,14 +45,14 @@ ScrapMotorSinglePin rightMotor = ScrapMotorSinglePin(DIR_RIGHT,PWM_RIGHT,-1);
 ScrapMotorControl leftMotorControl = ScrapMotorControl(leftMotor,leftEncoder);
 ScrapMotorControl rightMotorControl = ScrapMotorControl(rightMotor,rightEncoder);
 ScrapDualController dualController = ScrapDualController(leftMotorControl,rightMotorControl);
-// define Navigation component
+
+// BUTTONS
+Buttons buttons = Buttons(GO_PIN,STOP_PIN);
+// SWITCHES
+RoundSwitch roundSwitch = RoundSwitch();
 
 // SLOWEST = 180
 // FASTEST = 2200
-
-int modifier = 1;
-int counter = 0;
-
 LineIntersection* line;
 
 Movement* movement;
@@ -63,6 +66,7 @@ String firstReading;
 void setup() {
 	// Start serial for debugging purposes
 	initEncoders();
+	initButtons();
 	initializePins();
 	Serial.begin(9600);
 	Serial.println("serial started");
@@ -88,15 +92,27 @@ void setup() {
 	dualController.setMaxEncSpeed(1100);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
-	delay(500);
+	delay(1000);
 	//movement->approachNoFollowUntilPerpendicularLine();
 	//movement->turnLeft90();
 	//dualController.set(2500,2500);
+	for(int i = 0; i < roundSwitch.getRound(); i++) {
+		digitalWrite(EM_RELAY,LOW);
+		delay(50);
+		digitalWrite(EM_RELAY,HIGH);
+		delay(250);
+	}
+
+	while (!buttons.wasGoPressed()) {
+		delay(50);
+	}
+	navigation->goForward();
+	navigation->goForward();
+	navigation->goForward();
+	/*delay(1000);
 	navigation->goForward();
 	delay(1000);
-	navigation->goForward();
-	delay(1000);
-	navigation->goForward();
+	navigation->goForward();*/
 }
 
 
@@ -148,3 +164,17 @@ void checkEncoderL() {
 void checkEncoderR() {
 	rightEncoder.checkEncoder();
 }
+
+void initButtons() {
+	attachInterrupt(digitalPinToInterrupt(GO_PIN),goButtonFunction,CHANGE);
+	attachInterrupt(digitalPinToInterrupt(STOP_PIN),stopButtonFunction,CHANGE);
+}
+
+void goButtonFunction() {
+	buttons.checkGoButton();
+}
+
+void stopButtonFunction() {
+	buttons.checkStopButton();
+}
+
