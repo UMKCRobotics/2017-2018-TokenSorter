@@ -5,14 +5,30 @@ Movement::Movement()
 {
 }
 
-Movement::Movement(ScrapDualController& dualController, LineIntersection* lineIntersection) {
+Movement::Movement(ScrapDualController& dualController, LineIntersection* lineIntersection, Buttons& bothButtons) {
 	attachController(dualController);
 	attachLineIntersection(lineIntersection);
+	attachButtons(bothButtons);
 }
 
 Movement::~Movement()
 {
 }
+
+
+void Movement::stopUntilReboot() {
+	controller->stop();
+	while(true) {
+		delay(1000);
+	} 
+}
+
+void Movement::stopIfPressed() {
+	if (buttons->wasStopPressed()) {
+		stopUntilReboot();
+	}
+}
+
 
 void Movement::performTurn(Turn turnType) {
 	switch (turnType) {
@@ -110,11 +126,28 @@ void Movement::performBackwardApproach(BackwardApproach approachType) {
 	}
 }
 
+
+void Movement::turnTillEncoderValue(long encoderCountL, long encoderCountR) {
+	// set appropriate goals
+	controller->set(encoderCountL,encoderCountR);
+	// perform movement until goal is reached
+	while (!controller->performMovement()) {
+		stopIfPressed();	
+		delay(2);
+	}
+	// stop the motors
+	controller->stop();
+	// shift the encoder counts so they are relative to goal
+	controller->shiftCount();
+}
+
+
 void Movement::turnTillEncoderValue(long encoderCount) {
 	// set appropriate goals
 	controller->set(-encoderCount,encoderCount);
 	// perform movement until goal is reached
 	while (!controller->performMovement()) {
+		stopIfPressed();	
 		delay(2);
 	}
 	// stop the motors
@@ -135,12 +168,14 @@ void Movement::turnRight45() {
 }
 
 void Movement::turnLeft90() {
-	long encoderCount = 2700;
+	long encoderCount = 2600;
+	turnTillEncoderValue(800,800);
 	turnTillEncoderValue(encoderCount);
 }
 
 void Movement::turnRight90() {
-	long encoderCount = 0;
+	long encoderCount = -2600;
+	turnTillEncoderValue(800,800);
 	turnTillEncoderValue(encoderCount);
 }
 
@@ -164,6 +199,31 @@ void Movement::turnRight180() {
 	turnTillEncoderValue(encoderCount);
 }
 
+
+void Movement::followLine() {
+	int position = line->getLinePosition(true);
+	float defaultSpeed = 1100;
+	float maxOffset = 600;
+	float offset = 0;
+	// Line to the left; gotta go right to correct
+	if (position < 0) {
+		offset = map(position,-16,0,-maxOffset,0);
+	}
+	// Line to the right; gotta go left to correct
+	else if (position > 0) {
+		offset = map(position,0,16,0,maxOffset);
+	}
+	// Line in middle; do nothing
+	else {
+		offset = 0;
+	}
+	Serial.println(offset);
+	// set motor speeds
+	controller->setSpeed1(defaultSpeed+offset);
+	controller->setSpeed2(defaultSpeed-offset);
+}
+
+
 // FORWARD APPROACH COMMANDS
 void Movement::approachNoFollowUntilPerpendicularLine() {
 	// Go forward some amount until a perpendicular line is reached
@@ -171,6 +231,7 @@ void Movement::approachNoFollowUntilPerpendicularLine() {
 	controller->set(2550);
 	unsigned long time = millis();
 	while(!controller->performMovement()) {
+		stopIfPressed();
 		if (onLine) {
 			if (!line->getIfAtPerpendicular()) {
 				onLine = false;
@@ -193,6 +254,27 @@ void Movement::approachNoFollowUntilPerpendicularLine() {
 
 void Movement::approachFollowUntilPerpendicularLine() {
 	// Go forward while following line, until perpendicular line is reached
+	bool onLine = line->getIfAtPerpendicular();
+	Serial.println(onLine);
+	followLine();
+	unsigned long time = millis();
+	while(!line->getIfAtPerpendicular()) {
+		stopIfPressed();
+		if (onLine) {
+			if (!line->getIfAtPerpendicular()) {
+				onLine = false;
+			}
+		}
+		if (millis()-time > 30) {
+			followLine();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	controller->stop();
+	controller->set(controller->getCount());
+	controller->shiftCount();
 }
 
 

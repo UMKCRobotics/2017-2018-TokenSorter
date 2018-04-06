@@ -3,6 +3,7 @@
 #include "Arduino.h"
 #include "ScrapController.h"
 #include "LineIntersection.h"
+#include "Buttons.h"
 
 /// namespace to access Turn and Approach enumerations
 namespace moveOptions {
@@ -35,9 +36,13 @@ class Movement
 private:
 	ScrapDualController* controller;
 	LineIntersection* line;
+	Buttons* buttons;
+	// Freeze robot until reboot
+	void stopUntilReboot();
+	void stopIfPressed();
 public:
 	Movement();
-	Movement(ScrapDualController& dualController, LineIntersection* lineIntersection);
+	Movement(ScrapDualController& dualController, LineIntersection* lineIntersection, Buttons& bothButtons);
 	~Movement();
 	virtual void performTurn(Turn turnType);
 	virtual void performApproach(Approach approachType);
@@ -45,6 +50,7 @@ public:
 	// Attach components
 	virtual void attachController(ScrapDualController& dualController) { controller = &dualController; };
 	virtual void attachLineIntersection(LineIntersection* lineIntersection) { line = lineIntersection; };
+	virtual void attachButtons(Buttons& bothButtons) { buttons = &bothButtons; };
 	// Turn methods
     // TODO: stop using these, make them private if we really need them (I doubt we need them), use the parameter one
 	virtual void turnLeft45();
@@ -57,6 +63,7 @@ public:
 	virtual void turnRight180();
 	// Turning helper function
 	void turnTillEncoderValue(long encoderCount);
+	void turnTillEncoderValue(long encoderCountL, long encoderCountR);
     // use this
     /** negative for right **/
 	virtual void turn(const int& degreesLeft) {
@@ -67,6 +74,7 @@ public:
         else
             Serial.println(" deg to the right");
     }
+    virtual void followLine();
 	// Approach functions
 	virtual void approachNoFollowUntilPerpendicularLine();
 	virtual void approachFollowUntilPerpendicularLine();

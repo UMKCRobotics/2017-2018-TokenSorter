@@ -71,8 +71,8 @@ void setup() {
 	Serial.begin(9600);
 	Serial.println("serial started");
 	line = new LineIntersection(MIDDLE_IR_PIN);
-	movement = new Movement(dualController,line);
-	navigation = new Navigation(3,movement);
+	movement = new Movement(dualController,line,buttons);
+	navigation = new Navigation(roundSwitch.getRound(),movement);
 	linear.attach(ARM_LINEAR);
 	servo.attach(ARM_SERVO);
 	linear.write(40);
@@ -93,22 +93,29 @@ void setup() {
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
 	delay(1000);
+	while (!buttons.wasGoPressed()) {
+		delay(50);
+	}
+	movement->approachFollowUntilPerpendicularLine();
 	//movement->approachNoFollowUntilPerpendicularLine();
 	//movement->turnLeft90();
 	//dualController.set(2500,2500);
-	for(int i = 0; i < roundSwitch.getRound(); i++) {
+	
+	/*for(int i = 0; i < roundSwitch.getRound(); i++) {
 		digitalWrite(EM_RELAY,LOW);
 		delay(50);
 		digitalWrite(EM_RELAY,HIGH);
 		delay(250);
-	}
+	}*/
 
-	while (!buttons.wasGoPressed()) {
-		delay(50);
-	}
+	/*
+
 	navigation->goForward();
 	navigation->goForward();
 	navigation->goForward();
+	navigation->turnLeft();
+	*/
+
 	/*delay(1000);
 	navigation->goForward();
 	delay(1000);
@@ -124,6 +131,10 @@ void initializePins() {
 void loop() {	
 	delay(2);
 	dualController.performMovement();
+
+	//Serial.println(line->getLinePosition(true));
+	//delay(100);
+
 	//counter++;
 	//if (dualController.performMovement()) {
 	//	delay(1000);
