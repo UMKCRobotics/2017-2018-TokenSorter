@@ -186,6 +186,16 @@ void Gameboard::initializeBoard() {
 	// set a start state for the gameboard (going "To" A from center)
 	startState = dropOuterand270->getStateA()->To;
 
+	// set halfway distance points
+	at4and90->getStateB()->From->setApproach(FollowUntil4ftHalfway);
+	at4and90->getStateD()->From->setApproach(FollowUntil4ftHalfway);
+	at5and90->getStateB()->From->setApproach(FollowUntil5ftHalfway);
+	at5and90->getStateD()->From->setApproach(FollowUntil5ftHalfway);
+	at4and270->getStateB()->From->setApproach(FollowUntil4ftHalfway);
+	at4and270->getStateD()->From->setApproach(FollowUntil4ftHalfway);
+	at5and270->getStateB()->From->setApproach(FollowUntil5ftHalfway);
+	at5and270->getStateD()->From->setApproach(FollowUntil5ftHalfway);   
+
 	switch(round) {
 		case 4: // tiebreaker; nothing here
 		case 3: {

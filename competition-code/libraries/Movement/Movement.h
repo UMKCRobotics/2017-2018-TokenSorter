@@ -21,7 +21,9 @@ namespace moveOptions {
 		FollowUntilCrossingY,
         FollowUntilSeparatingY,  // 9
 		MoveIntoStart,
-        MoveIntoDropPosition
+        MoveIntoDropPosition,
+        FollowUntil5ftHalfway,
+        FollowUntil4ftHalfway
 	};
 	enum BackwardApproach {
 		BackwardLeaveDropPosition=1,
@@ -38,7 +40,7 @@ private:
 	ScrapDualController* controller;
 	LineIntersection* line;
 	Buttons* buttons;
-	PID pid = PID(50,2,0.5);
+	PID pid = PID(72.5,2.9,0.725);//PID(50,2,0.5);
 	// Freeze robot until reboot
 	void stopUntilReboot();
 	void stopIfPressed();
@@ -66,6 +68,7 @@ public:
 	// Turning helper function
 	void turnTillEncoderValue(long encoderCount);
 	void turnTillEncoderValue(long encoderCountL, long encoderCountR);
+	void positionForTurning();
     // use this
     /** negative for right **/
 	virtual void turn(const int& degreesLeft) {
@@ -77,6 +80,7 @@ public:
             Serial.println(" deg to the right");
     }
     virtual void followLine();
+    virtual void followLineBackwards();
 	// Approach functions
 	virtual void approachNoFollowUntilPerpendicularLine();
 	virtual void approachFollowUntilPerpendicularLine();
@@ -85,17 +89,24 @@ public:
 	virtual void approachFollowOnRightUntilPerpendicularLine(){};
 	virtual void approachFollowOnLeftUntilCrossesLine(){};
 	virtual void approachFollowOnRightUntilCrossesLine(){};
-	virtual void approachFollowUntilCrossingY(){};
-	virtual void approachFollowUntilSeparatingY(){};
+	virtual void approachFollowUntilCrossingY();
+	virtual void approachFollowUntilSeparatingY();
 	virtual void approachMoveIntoStart(){};
-	virtual void approachMoveIntoDropPosition(){};
+	virtual void approachMoveIntoDropPosition();
+	virtual void approachFollowUntil5ftHalfway();
+	virtual void approachFollowUntil4ftHalfway();
 	// Backward Approach functions
-	virtual void approachBackwardLeaveDropPosition(){};
+	virtual void approachBackwardLeaveDropPosition();
 	virtual void approachBackwardFollowUntilCrossingY(){};
-	virtual void approachBackwardFollowUntilSeparatingY(){};
-	virtual void approachBackwardFollowUntilPerpendicularLine(){};
+	virtual void approachBackwardFollowUntilSeparatingY();
+	virtual void approachBackwardFollowUntilPerpendicularLine();
 	// Lining Up Functions
 	virtual void lineUpForToken();
+	virtual void lineUpForTokenSeparatingY();
+	virtual void lineUpForTokenCrossingY();
+	virtual void reverseLineUpForToken();
+	virtual void reverseLineUpForTokenSeparatingY();
+	virtual void reverseLineUpForTokenCrossingY();
 };
 
 

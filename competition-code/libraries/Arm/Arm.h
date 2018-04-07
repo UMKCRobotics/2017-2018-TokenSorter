@@ -63,6 +63,8 @@ class Arm {
 		void moveArmToPosition(int slot);
 		void moveArmDown();
 		void moveArmUp();
+		void addCount() { };
+		void dumpAll() { };
 
 		~Arm() {};
 

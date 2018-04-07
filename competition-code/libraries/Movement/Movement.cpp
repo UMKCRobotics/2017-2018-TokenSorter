@@ -99,6 +99,12 @@ void Movement::performApproach(Approach approachType) {
 	case MoveIntoDropPosition:
 		approachMoveIntoDropPosition();
 		break;
+	case FollowUntil5ftHalfway:
+		approachFollowUntil5ftHalfway();
+		break;
+	case FollowUntil4ftHalfway:
+		approachFollowUntil4ftHalfway();
+		break;
 	default:
 		Serial.println("Approach type does not exist");
 		break;
@@ -156,53 +162,76 @@ void Movement::turnTillEncoderValue(long encoderCount) {
 	controller->shiftCount();
 }
 
+
+void Movement::positionForTurning() {
+	turnTillEncoderValue(800,800);
+}
+
+
 // TURNING COMMANDS
 void Movement::turnLeft45() {
-	long encoderCount = 0;
+	long encoderCount = 1300;
 	turnTillEncoderValue(encoderCount);
+	turnTillEncoderValue(500,500);
 }
 
 void Movement::turnRight45() {
-	long encoderCount = 0;
+	long encoderCount = -1300;
 	turnTillEncoderValue(encoderCount);
+	turnTillEncoderValue(500,500);
 }
 
 void Movement::turnLeft90() {
 	long encoderCount = 2600;
-	turnTillEncoderValue(800,800);
 	turnTillEncoderValue(encoderCount);
 }
 
 void Movement::turnRight90() {
 	long encoderCount = -2600;
-	turnTillEncoderValue(800,800);
 	turnTillEncoderValue(encoderCount);
 }
 
 void Movement::turnLeft135() {
-	long encoderCount = 0;
+	long encoderCount = 3700;
 	turnTillEncoderValue(encoderCount);
+	turnTillEncoderValue(700,700);
 }
 
 void Movement::turnRight135() {
-	long encoderCount = 0;
+	long encoderCount = -3700;
 	turnTillEncoderValue(encoderCount);
+	turnTillEncoderValue(700,700);
 }
 
 void Movement::turnLeft180() {
-	long encoderCount = 0;
+	long encoderCount = 5200;
 	turnTillEncoderValue(encoderCount);
 }
 
 void Movement::turnRight180() {
-	long encoderCount = 0;
+	long encoderCount = -5200;
 	turnTillEncoderValue(encoderCount);
 }
 
 
 void Movement::followLine() {
 	int position = line->getLinePosition(true);
-	float defaultSpeed = 1100;
+	float defaultSpeed = 1600;
+	//float maxOffset = 800;
+	float offset = 0;
+	
+	offset = pid.calculate(position);
+
+	Serial.println(offset);
+	// set motor speeds
+	controller->setSpeed1(defaultSpeed+offset);
+	controller->setSpeed2(defaultSpeed-offset);
+}
+
+
+void Movement::followLineBackwards() {
+	int position = line->getLinePosition(true);
+	float defaultSpeed = -1600;
 	//float maxOffset = 800;
 	float offset = 0;
 	
@@ -269,10 +298,192 @@ void Movement::approachFollowUntilPerpendicularLine() {
 	controller->resetCount();
 }
 
+void Movement::approachFollowUntilSeparatingY() {
+	bool onLine = line->getIfAtSeparatingY();
+	Serial.println(onLine);
+	pid.reset();
+	followLine();
+	unsigned long time = millis();
+	while (controller->getCount() < 400) {
+		stopIfPressed();
+		if (millis()-time > 30) {
+			followLine();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	while(!line->getIfAtSeparatingY()) {
+		stopIfPressed();
+		if (onLine) {
+			if (!line->getIfAtSeparatingY()) {
+				onLine = false;
+			}
+		}
+		if (millis()-time > 30) {
+			followLine();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	controller->stop();
+	controller->set(0,0);
+	controller->resetCount();
+}
+
+void Movement::approachFollowUntilCrossingY() {
+	bool onLine = line->getIfAtCrossingY();
+	Serial.println(onLine);
+	pid.reset();
+	followLine();
+	unsigned long time = millis();
+	while (controller->getCount() < 500) {
+		stopIfPressed();
+		if (millis()-time > 30) {
+			followLine();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	while(!line->getIfAtCrossingY()) {
+		stopIfPressed();
+		if (onLine) {
+			if (!line->getIfAtCrossingY()) {
+				onLine = false;
+			}
+		}
+		if (millis()-time > 30) {
+			followLine();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	controller->stop();
+	controller->set(0,0);
+	controller->resetCount();
+}
+
+void Movement::approachMoveIntoDropPosition() {
+	turnTillEncoderValue(2000,2000);
+}
+
+void Movement::approachFollowUntil5ftHalfway() {
+	//bool onLine = line->getIfAtPerpendicular();
+	pid.reset();
+	followLine();
+	unsigned long time = millis();
+	while(controller->getCount() <= 9000) {
+		stopIfPressed();
+		/*if (onLine) {
+			if (!line->getIfAtPerpendicular()) {
+				onLine = false;
+			}
+		}*/
+		if (millis()-time > 30) {
+			followLine();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	controller->stop();
+	controller->set(0,0);
+	controller->resetCount();
+}
+
+void Movement::approachFollowUntil4ftHalfway() {
+	pid.reset();
+	followLine();
+	unsigned long time = millis();
+	while(controller->getCount() <= 6000) {
+		stopIfPressed();
+		/*if (onLine) {
+			if (!line->getIfAtPerpendicular()) {
+				onLine = false;
+			}
+		}*/
+		if (millis()-time > 30) {
+			followLine();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	controller->stop();
+	controller->set(0,0);
+	controller->resetCount();
+}
+
 void Movement::lineUpForToken() {
-	turnTillEncoderValue(650,650);	
+	turnTillEncoderValue(650,650);
+}
+
+void Movement::lineUpForTokenSeparatingY() {
+	turnTillEncoderValue(450,450);
+}
+
+void Movement::lineUpForTokenCrossingY() {
+	turnTillEncoderValue(1100,1100);
+}
+
+void Movement::reverseLineUpForToken() {
+	turnTillEncoderValue(-650,-650);
+}
+
+void Movement::reverseLineUpForTokenSeparatingY() {
+	turnTillEncoderValue(-450,-450);
+}
+
+void Movement::reverseLineUpForTokenCrossingY() {
+	turnTillEncoderValue(-1100,-1100);
 }
 
 
 
 // BACKWARD APPROACH COMMANDS
+void Movement::approachBackwardLeaveDropPosition() {
+	turnTillEncoderValue(-2200,-2200);
+}
+
+void Movement::approachBackwardFollowUntilSeparatingY() {
+	/*bool onLine = line->getIfAtSeparatingY();
+	Serial.println(onLine);
+	pid.reset();
+	followLineBackwards();
+	unsigned long time = millis();
+	while (controller->getCount() > -400) {
+		stopIfPressed();
+		if (millis()-time > 30) {
+			followLineBackwards();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	while(!line->getIfAtSeparatingY()) {
+		stopIfPressed();
+		if (onLine) {
+			if (!line->getIfAtSeparatingY()) {
+				onLine = false;
+			}
+		}
+		if (millis()-time > 30) {
+			followLineBackwards();
+			time = millis();
+		}
+		controller->performSpeedMovement();
+		delay(2);
+	}
+	controller->stop();
+	controller->set(0,0);
+	controller->resetCount();*/
+	turnTillEncoderValue(-3000,-3000);
+}
+
+void Movement::approachBackwardFollowUntilPerpendicularLine() {
+	turnTillEncoderValue(-2300,-2300);
+}
+

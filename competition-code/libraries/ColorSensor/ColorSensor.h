@@ -20,7 +20,7 @@ class ColorSensor
 
     const static int COLOR_ARRAY_SIZE = 8;
     
-    const unsigned int DIFF_CONSTRAINT = 80;//45; // color differntial constraint
+    const unsigned int DIFF_CONSTRAINT = 1000;//80;//45; // color differntial constraint
     
     const String COLOR_NAMES_STRINGS[COLOR_ARRAY_SIZE]
     {
@@ -37,13 +37,13 @@ class ColorSensor
     // Holds the values of the colors
     int colors[COLOR_ARRAY_SIZE][3] =
     {
-      {255,19,39}, // red
-      {70,187,99}, // green
-      {21,144,255}, // blue
-      {133,155,28}, // yellow
+      {243,24,26}, // red
+      {29,195,64}, // green
+      {31,110,248}, // blue
+      {125,151,41}, // yellow
       {180,76,130}, // magenta
-      {43,175,153}, // cyan
-      {91,138,116} // gray
+      {20,165,202}, // cyan
+      {83,134,130} // gray
     };
 
     uint8_t multiplexerPort = 0;

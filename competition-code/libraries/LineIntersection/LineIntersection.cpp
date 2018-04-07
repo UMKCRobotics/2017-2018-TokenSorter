@@ -109,7 +109,9 @@ bool LineIntersection::getIfAtPerpendicular() {
 
 bool LineIntersection::getIfAtSeparatingY() {
 	return (lastFullReading[2] == ON_LINE && lastFullReading[6] == ON_LINE)
-			|| (lastFullReading[1] == ON_LINE && lastFullReading[7] == ON_LINE);
+			|| (lastFullReading[1] == ON_LINE && lastFullReading[7] == ON_LINE)
+			|| (lastFullReading[2] == ON_LINE && lastFullReading[7] == ON_LINE)
+			|| (lastFullReading[1] == ON_LINE && lastFullReading[6] == ON_LINE);
 }
 
 

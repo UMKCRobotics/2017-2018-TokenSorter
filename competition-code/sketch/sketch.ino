@@ -15,7 +15,7 @@
 // SENSOR CONSTANTS
 #define MIDDLE_IR_PIN A6
 // ARM CONSTANTS
-#define EM_RELAY 21
+#define EM_RELAY 32//21
 #define ARM_LINEAR 23
 #define ARM_SERVO 22
 // MOTOR CONSTANTS
@@ -100,10 +100,10 @@ void setup() {
 		delay(50);
 	}
 
-	while(true) {
+	/*while(true) {
 		delay(100);
 		Serial.println(colorBottom.getColor());
-	}
+	}*/
 
 	//movement->approachFollowUntilPerpendicularLine();
 	
@@ -112,8 +112,8 @@ void setup() {
 	//navigation->turnLeft();
 	//navigation->goForward();
 	
-	/* IMPORTANT
-	movement->approachFollowUntilPerpendicularLine();
+	//IMPORTANT
+	/*movement->approachFollowUntilPerpendicularLine();
 	navigation->lineUpForToken();
 	arm.moveArmToPosition(armOptions::Hole);
 	arm.moveArmDown();
@@ -136,11 +136,139 @@ void setup() {
 		arm.moveArmToPosition(color);
 		arm.moveArmDown();
 		arm.setEmOn();
-		delay(200);
+		delay(400);
 		arm.moveArmUp();
 		arm.moveArmToPosition(armOptions::Hole);
 		arm.setEmOff();
 	}*/
+
+	if (roundSwitch.getRound() == 1) {
+		navigation->goForward();
+		navigation->goForward();
+		navigation->goForward();
+		movement->positionForTurning();
+		navigation->turnLeft();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->turnRight();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->turnRight();
+		navigation->turnRight();
+		navigation->goForward();
+		navigation->goForward();
+		//movement->approachFollowUntilSeparatingY();
+		movement->lineUpForTokenSeparatingY();
+		pickUpToken();
+		movement->reverseLineUpForTokenSeparatingY();
+		//movement->positionForTurning();
+		navigation->turnRight();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->turnLeft();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->turnLeft();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->turnRight();
+		navigation->goForward();
+		navigation->goForward();
+		movement->lineUpForTokenCrossingY();
+		pickUpToken();
+		navigation->turnRight();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->goForward();
+		navigation->lineUpForToken();
+		pickUpToken();
+		navigation->turnLeft();
+		navigation->goForward();
+		// DEPOSITING TOKENS
+		movement->approachFollowUntilSeparatingY();
+		movement->approachMoveIntoDropPosition();
+		depositToken();
+		movement->approachBackwardLeaveDropPosition();
+		movement->approachBackwardFollowUntilSeparatingY();
+		movement->lineUpForTokenSeparatingY(); // go forward a bit
+		movement->turnLeft135();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->positionForTurning();
+		movement->turnRight90();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->approachMoveIntoDropPosition();
+		depositToken();
+		movement->approachBackwardLeaveDropPosition();
+		movement->approachBackwardFollowUntilPerpendicularLine();
+		movement->positionForTurning();
+		movement->turnLeft90();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->lineUpForTokenSeparatingY(); // go forward a bit
+		movement->turnRight45();
+		movement->approachFollowUntilSeparatingY();
+		movement->approachMoveIntoDropPosition();
+		depositToken();
+		movement->approachBackwardLeaveDropPosition();
+		movement->approachBackwardFollowUntilSeparatingY();
+		movement->positionForTurning();
+		movement->turnLeft135();
+		movement->approachFollowUntil5ftHalfway();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->lineUpForTokenSeparatingY(); // go forward a bit
+		movement->turnRight45();
+		// copy paste
+		movement->approachFollowUntilSeparatingY();
+		movement->approachMoveIntoDropPosition();
+		depositToken();
+		movement->approachBackwardLeaveDropPosition();
+		movement->approachBackwardFollowUntilSeparatingY();
+		movement->positionForTurning(); // go forward a bit
+		movement->turnLeft135();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->positionForTurning();
+		movement->turnRight90();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->approachMoveIntoDropPosition();
+		depositToken();
+		movement->approachBackwardLeaveDropPosition();
+		movement->approachBackwardFollowUntilPerpendicularLine();
+		movement->positionForTurning();
+		movement->turnLeft90();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->lineUpForTokenSeparatingY(); // go forward a bit
+		movement->turnRight45();
+		movement->approachFollowUntilSeparatingY();
+		movement->approachMoveIntoDropPosition();
+		depositToken();
+		movement->approachBackwardLeaveDropPosition();
+		movement->approachBackwardFollowUntilSeparatingY();
+		movement->positionForTurning();
+		movement->turnLeft135();
+		movement->approachFollowUntil5ftHalfway();
+		movement->turnRight90();
+		movement->approachFollowUntilPerpendicularLine();
+		movement->approachMoveIntoDropPosition();
+		/*while(true) {
+			arm.setEmOn();
+			delay(500);
+			arm.setEmOff();
+		}*/
+	}
 
 
 
@@ -211,6 +339,44 @@ void setup() {
 	navigation->goForward();
 	delay(1000);
 	navigation->goForward();*/
+}
+
+void pickUpToken() {
+	arm.moveArmToPosition(armOptions::Hole);
+	arm.moveArmDown();
+	arm.setEmOn();
+	arm.moveArmUp();
+	arm.moveArmToPosition(armOptions::Sensor);
+	arm.moveArmDown();
+	delay(200);
+	int color = colorInside.getColor();
+	arm.moveArmUp();
+	//if (color == 0) {
+	//	arm.moveArmToPosition(armOptions::Hole);
+	//	arm.setEmOff();		
+	//}
+	//else {
+	arm.moveArmToPosition(color);
+	arm.setEmOff();
+	delay(300);
+	arm.moveArmToPosition(armOptions::Hole);
+	//arm.moveArmToPosition(color);
+	//arm.moveArmDown();
+	//arm.setEmOn();
+	//delay(400);
+	//arm.moveArmUp();
+	//arm.moveArmToPosition(armOptions::Hole);
+	//arm.setEmOff();
+}
+
+void depositToken() {
+	int color = colorBottom.getColor();
+	arm.moveArmToPosition(color);
+	arm.moveArmDown();
+	arm.setEmOn();
+	arm.moveArmUp();
+	arm.moveArmToPosition(armOptions::Hole);
+	arm.setEmOff();
 }
 
 

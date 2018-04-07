@@ -86,7 +86,7 @@ IntersectionI::IntersectionI(Movement* move, String name) : Intersection(move, n
 	// setup states To/From A
 	stateA->To -> setLeftTurn(Left135, stateB->To);
 	stateA->To -> setRightTurn(Right135, stateD->To);
-	stateA->From -> setApproach(FollowUntilPerpendicularLine);
+	stateA->From -> setApproach(FollowUntilSeparatingY);//FollowUntilPerpendicularLine);
 	stateA->From -> setBackwardApproach(BackwardFollowUntilSeparatingY);
 	// setup states To/From B
 	stateB->To -> setLeftTurn(Left45, stateC->To);
@@ -97,7 +97,7 @@ IntersectionI::IntersectionI(Movement* move, String name) : Intersection(move, n
 	// setup states To/From C
 	stateC->To -> setLeftTurn(Left45, stateD->To);
 	stateC->To -> setRightTurn(Right45, stateB->To);
-	stateC->From -> setApproach(FollowUntilPerpendicularLine);
+	stateC->From -> setApproach(FollowUntilCrossingY);
 	stateC->From -> setBackwardApproach(BackwardFollowUntilCrossingY);
 	// setup states To/From D
 	stateD->To -> setLeftTurn(Left135, stateA->To);
