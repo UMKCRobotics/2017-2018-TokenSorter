@@ -51,34 +51,38 @@ Buttons buttons = Buttons(GO_PIN,STOP_PIN);
 // SWITCHES
 RoundSwitch roundSwitch = RoundSwitch();
 
+ColorSensor colorInside = ColorSensor();
+ColorSensor colorBottom = ColorSensor();
+
+
 // SLOWEST = 180
 // FASTEST = 2200
 LineIntersection* line;
 
 Movement* movement;
 Navigation* navigation;
+Arm arm = Arm(ARM_LINEAR,ARM_SERVO,EM_RELAY);
 
-Servo linear;
-Servo servo;
-
-String firstReading;
 
 void setup() {
 	// Start serial for debugging purposes
+	colorInside.initSensor(0);
+	colorBottom.initSensor(1);
 	initEncoders();
 	initButtons();
-	initializePins();
+	//initializePins();
 	Serial.begin(9600);
 	Serial.println("serial started");
 	line = new LineIntersection(MIDDLE_IR_PIN);
 	movement = new Movement(dualController,line,buttons);
 	navigation = new Navigation(roundSwitch.getRound(),movement);
-	linear.attach(ARM_LINEAR);
-	servo.attach(ARM_SERVO);
-	linear.write(40);
-	//linear.write(120);
-	servo.write(180);
-	digitalWrite(EM_RELAY,HIGH);
+	//arm = new Arm(ARM_LINEAR,ARM_SERVO,EM_RELAY);
+	//linear.attach(ARM_LINEAR);
+	//servo.attach(ARM_SERVO);
+	//linear.write(0);
+	//linear.write(40);
+	//servo.write(180);
+	//digitalWrite(EM_RELAY,HIGH);
 	//leftMotorControl.setControl(0);
 	//rightMotorControl.setControl(0);
 	//leftMotor.setMotor(30);
@@ -89,17 +93,104 @@ void setup() {
 	dualController.setSlowdownThresh(500);
 	dualController.setMinSlowPower(40);
 	dualController.setMinEncSpeed(180);
-	dualController.setMaxEncSpeed(1100);
+	dualController.setMaxEncSpeed(1700);
 	dualController.setSpeedBalance(30);
 	dualController.initControllers();
-	delay(1000);
-	while (!buttons.wasGoPressed()) {
+	while(!buttons.wasGoPressed()) {
 		delay(50);
 	}
+
+	while(true) {
+		delay(100);
+		Serial.println(colorBottom.getColor());
+	}
+
+	//movement->approachFollowUntilPerpendicularLine();
+	
+	//navigation->goForward();
+	//navigation->goForward();
+	//navigation->turnLeft();
+	//navigation->goForward();
+	
+	/* IMPORTANT
+	movement->approachFollowUntilPerpendicularLine();
+	navigation->lineUpForToken();
+	arm.moveArmToPosition(armOptions::Hole);
+	arm.moveArmDown();
+	arm.setEmOn();
+	arm.moveArmUp();
+	arm.moveArmToPosition(armOptions::Sensor);
+	arm.moveArmDown();
+	delay(200);
+	int color = colorInside.getColor();
+	arm.moveArmUp();
+	if (color == 0) {
+		arm.moveArmToPosition(armOptions::Hole);
+		arm.setEmOff();		
+	}
+	else {
+		arm.moveArmToPosition(color);
+		arm.setEmOff();
+		delay(300);
+		arm.moveArmToPosition(armOptions::Hole);
+		arm.moveArmToPosition(color);
+		arm.moveArmDown();
+		arm.setEmOn();
+		delay(200);
+		arm.moveArmUp();
+		arm.moveArmToPosition(armOptions::Hole);
+		arm.setEmOff();
+	}*/
+
+
+
+
+
+
+
+	/*arm.moveArmUp();
+	arm.moveArmToPosition(armOptions::Red);
+	arm.setEmOff();
+	delay(300);
+	arm.moveArmToPosition(armOptions::Hole);*/
+	
+	//arm.moveArmDown();
+	//arm.setEmOn();
+	//arm.moveArmUp();
+	//delay(1000);
+	/*arm.moveArmToPosition(armOptions::Sensor);
+	arm.moveArmToPosition(armOptions::Yellow);
+	arm.moveArmDown();
+	arm.setEmOn();
+	delay(250);
+	arm.moveArmUp();*/
+	/*arm.moveArmToPosition(armOptions::Green);
+	arm.moveArmToPosition(armOptions::Blue);
+	arm.moveArmToPosition(armOptions::Yellow);
+	arm.moveArmToPosition(armOptions::Magenta);
+	arm.moveArmToPosition(armOptions::Cyan);
+	arm.moveArmToPosition(armOptions::Gray);*/
+	/*arm.moveArmToPosition(armOptions::Hole);
+	arm.setEmOff();
+	//delay(1000);
+	//linear.write(125);
+	//delay(3000);
+	//digitalWrite(EM_RELAY,LOW);
+	//linear.write(40);
+	//delay(2000);
+	//digitalWrite(EM_RELAY,HIGH);
+	
+
+	buttons.resetGo();
+	while (!buttons.wasGoPressed()) {
+		//Serial.println(colorInside.getColor());
+		delay(50);
+	}
+
 	movement->approachFollowUntilPerpendicularLine();
 	//movement->approachNoFollowUntilPerpendicularLine();
 	//movement->turnLeft90();
-	//dualController.set(2500,2500);
+	//dualController.set(2500,2500);*/
 	
 	/*for(int i = 0; i < roundSwitch.getRound(); i++) {
 		digitalWrite(EM_RELAY,LOW);

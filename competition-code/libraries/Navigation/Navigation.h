@@ -24,6 +24,7 @@ public:
 	bool turnRight();
 	bool goForward();
 	bool goBackward();
+	bool lineUpForToken() { movement->lineUpForToken(); return true; };
 	String getCurrentStateInfo();
 };
 

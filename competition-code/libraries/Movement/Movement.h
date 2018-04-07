@@ -4,6 +4,7 @@
 #include "ScrapController.h"
 #include "LineIntersection.h"
 #include "Buttons.h"
+#include "PID.h"
 
 /// namespace to access Turn and Approach enumerations
 namespace moveOptions {
@@ -37,6 +38,7 @@ private:
 	ScrapDualController* controller;
 	LineIntersection* line;
 	Buttons* buttons;
+	PID pid = PID(50,2,0.5);
 	// Freeze robot until reboot
 	void stopUntilReboot();
 	void stopIfPressed();
@@ -92,6 +94,8 @@ public:
 	virtual void approachBackwardFollowUntilCrossingY(){};
 	virtual void approachBackwardFollowUntilSeparatingY(){};
 	virtual void approachBackwardFollowUntilPerpendicularLine(){};
+	// Lining Up Functions
+	virtual void lineUpForToken();
 };
 
 

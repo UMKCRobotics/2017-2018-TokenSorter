@@ -20,7 +20,7 @@ class ColorSensor
 
     const static int COLOR_ARRAY_SIZE = 8;
     
-    const unsigned int DIFF_CONSTRAINT = 45; // color differntial constraint
+    const unsigned int DIFF_CONSTRAINT = 80;//45; // color differntial constraint
     
     const String COLOR_NAMES_STRINGS[COLOR_ARRAY_SIZE]
     {

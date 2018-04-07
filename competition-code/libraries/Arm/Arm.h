@@ -5,26 +5,27 @@
 
 namespace armOptions {
 	enum ColorSlot {
-		Red=0,
-		Blue,
+		Hole=0,
+		Red,
 		Green,
+		Blue,
 		Yellow,
 		Magenta,
 		Cyan,
 		Gray,
-		Sensor,
-		Hole
+		Sensor
 	};
 }
-
-using namespace armOptions;
 
 
 struct ArmPosition {
 	int servo_position;
+	int arm_up;
+	int arm_down;
 	int count=0;
 };
 
+using namespace armOptions;
 
 class Arm {
 	private:
@@ -41,11 +42,30 @@ class Arm {
 		ArmPosition currentPosition;
 		int currentArmHeight;
 		// COLOR POSITIONS
-		ArmPosition position[9];
+		ArmPosition position[9] = {
+			{180,40,125,0}, // Hole
+			{134,40,87,0}, // Red
+			{113,40,87,0}, // Green
+			{92,40,87,0}, // Blue
+			{69,40,87,0}, // Yellow
+			{48,40,87,0}, // Magenta
+			{30,40,87,0}, // Cyan
+			{8,40,87,0}, // Gray
+			{157,40,60,0} // Sensor
+		};
 	public:
-		Arm();
-		Arm(int linear, int servo, int em);
+		Arm() {};
+		Arm(int linearPin, int servoPin, int emPin);
+		void setEmOn() { digitalWrite(em_pin,LOW); em_state = true; }; // electromagnet on
+		void setEmOff() { digitalWrite(em_pin,HIGH); em_state = false; }; // electromagnet off
+		bool getIfEmOn() { return em_state; };
+		void moveArmToPosition(ColorSlot slot);
+		void moveArmToPosition(int slot);
+		void moveArmDown();
+		void moveArmUp();
+
 		~Arm() {};
+
 
 };
 

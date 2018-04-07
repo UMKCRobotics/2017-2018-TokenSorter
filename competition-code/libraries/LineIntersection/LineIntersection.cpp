@@ -69,26 +69,26 @@ int LineIntersection::getLinePosition(bool getNewData) {
 	}
 	if (lastFullReading[4] == ON_LINE) {
 		// if on the line, only worry about closest two sensors
-		if (lastFullReading[3] == ON_LINE) position -= 1;
-		if (lastFullReading[5] == ON_LINE) position += 1;
+		if (lastFullReading[3] == ON_LINE) position -= 4;//1;
+		if (lastFullReading[5] == ON_LINE) position += 4;//1;
 	}
 	else {
 		// otherwise, worry about all
 		if (lastFullReading[3] == ON_LINE || lastFullReading[5] == ON_LINE) {
-			if (lastFullReading[3] == ON_LINE) position -= 4;
-			if (lastFullReading[5] == ON_LINE) position += 4;
+			if (lastFullReading[3] == ON_LINE) position -= 4;//4;
+			if (lastFullReading[5] == ON_LINE) position += 4;//4;
 		}
 		else if (lastFullReading[2] == ON_LINE || lastFullReading[6] == ON_LINE) {
-			if (lastFullReading[2] == ON_LINE) position -= 8;
-			if (lastFullReading[6] == ON_LINE) position += 8;
+			if (lastFullReading[2] == ON_LINE) position -= 6;//8;
+			if (lastFullReading[6] == ON_LINE) position += 6;//8;
 		}
 		else if (lastFullReading[1] == ON_LINE || lastFullReading[7] == ON_LINE) {
-			if (lastFullReading[1] == ON_LINE) position -= 12;
-			if (lastFullReading[7] == ON_LINE) position += 12;
+			if (lastFullReading[1] == ON_LINE) position -= 8;//12;
+			if (lastFullReading[7] == ON_LINE) position += 8;//12;
 		}
 		else if (lastFullReading[0] == ON_LINE || lastFullReading[8] == ON_LINE) {
-			if (lastFullReading[0] == ON_LINE) position -= 16;
-			if (lastFullReading[8] == ON_LINE) position += 16;
+			if (lastFullReading[0] == ON_LINE) position -= 10;//16;
+			if (lastFullReading[8] == ON_LINE) position += 10;//16;
 		}
 		// remember last position if no IRs are on_line
 		if (position == 0) {

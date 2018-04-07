@@ -203,20 +203,11 @@ void Movement::turnRight180() {
 void Movement::followLine() {
 	int position = line->getLinePosition(true);
 	float defaultSpeed = 1100;
-	float maxOffset = 600;
+	//float maxOffset = 800;
 	float offset = 0;
-	// Line to the left; gotta go right to correct
-	if (position < 0) {
-		offset = map(position,-16,0,-maxOffset,0);
-	}
-	// Line to the right; gotta go left to correct
-	else if (position > 0) {
-		offset = map(position,0,16,0,maxOffset);
-	}
-	// Line in middle; do nothing
-	else {
-		offset = 0;
-	}
+	
+	offset = pid.calculate(position);
+
 	Serial.println(offset);
 	// set motor speeds
 	controller->setSpeed1(defaultSpeed+offset);
@@ -256,6 +247,7 @@ void Movement::approachFollowUntilPerpendicularLine() {
 	// Go forward while following line, until perpendicular line is reached
 	bool onLine = line->getIfAtPerpendicular();
 	Serial.println(onLine);
+	pid.reset();
 	followLine();
 	unsigned long time = millis();
 	while(!line->getIfAtPerpendicular()) {
@@ -273,8 +265,12 @@ void Movement::approachFollowUntilPerpendicularLine() {
 		delay(2);
 	}
 	controller->stop();
-	controller->set(controller->getCount());
-	controller->shiftCount();
+	controller->set(0,0);
+	controller->resetCount();
+}
+
+void Movement::lineUpForToken() {
+	turnTillEncoderValue(650,650);	
 }
 
 
