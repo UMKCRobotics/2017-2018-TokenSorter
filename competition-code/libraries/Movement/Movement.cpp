@@ -260,7 +260,7 @@ void Movement::approachNoFollowUntilPerpendicularLine() {
 		else if (line->getIfAtPerpendicular()) {
 			break;
 		}
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			line->read();
 			time = millis();
 		}
@@ -286,7 +286,7 @@ void Movement::approachFollowUntilPerpendicularLine() {
 				onLine = false;
 			}
 		}
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			followLine();
 			time = millis();
 		}
@@ -306,7 +306,7 @@ void Movement::approachFollowUntilSeparatingY() {
 	unsigned long time = millis();
 	while (controller->getCount() < 400) {
 		stopIfPressed();
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			followLine();
 			time = millis();
 		}
@@ -320,7 +320,7 @@ void Movement::approachFollowUntilSeparatingY() {
 				onLine = false;
 			}
 		}
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			followLine();
 			time = millis();
 		}
@@ -340,7 +340,7 @@ void Movement::approachFollowUntilCrossingY() {
 	unsigned long time = millis();
 	while (controller->getCount() < 500) {
 		stopIfPressed();
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			followLine();
 			time = millis();
 		}
@@ -354,7 +354,7 @@ void Movement::approachFollowUntilCrossingY() {
 				onLine = false;
 			}
 		}
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			followLine();
 			time = millis();
 		}
@@ -382,7 +382,7 @@ void Movement::approachFollowUntil5ftHalfway() {
 				onLine = false;
 			}
 		}*/
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			followLine();
 			time = millis();
 		}
@@ -405,7 +405,7 @@ void Movement::approachFollowUntil4ftHalfway() {
 				onLine = false;
 			}
 		}*/
-		if (millis()-time > 30) {
+		if (millis()-time > lineInterval) {
 			followLine();
 			time = millis();
 		}

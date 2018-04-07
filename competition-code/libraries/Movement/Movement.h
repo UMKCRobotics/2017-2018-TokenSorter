@@ -40,7 +40,9 @@ private:
 	ScrapDualController* controller;
 	LineIntersection* line;
 	Buttons* buttons;
-	PID pid = PID(72.5,2.9,0.725);//PID(50,2,0.5);
+	PID pid = PID(72.5,2.9,0.725);//
+	PID pidSlow = PID(50,2,0.5);
+	int lineInterval = 15;
 	// Freeze robot until reboot
 	void stopUntilReboot();
 	void stopIfPressed();
