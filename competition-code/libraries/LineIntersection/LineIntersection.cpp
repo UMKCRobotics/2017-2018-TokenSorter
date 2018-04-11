@@ -112,6 +112,11 @@ bool LineIntersection::getIfAtSeparatingY() {
 			|| (lastFullReading[1] == ON_LINE && lastFullReading[7] == ON_LINE)
 			|| (lastFullReading[2] == ON_LINE && lastFullReading[7] == ON_LINE)
 			|| (lastFullReading[1] == ON_LINE && lastFullReading[6] == ON_LINE);
+			/*|| (lastFullReading[0] == ON_LINE && lastFullReading[8] == ON_LINE)
+			|| (lastFullReading[0] == ON_LINE && lastFullReading[7] == ON_LINE)
+			|| (lastFullReading[1] == ON_LINE && lastFullReading[8] == ON_LINE)
+			|| (lastFullReading[0] == ON_LINE && lastFullReading[6] == ON_LINE)
+			|| (lastFullReading[2] == ON_LINE && lastFullReading[8] == ON_LINE);*/
 }
 
 

@@ -203,6 +203,7 @@ void setup() {
 	movement->approachFollowUntilSeparatingY();
 	movement->approachMoveIntoDropPosition();
 	depositToken();
+	depositToken();
 	movement->approachBackwardLeaveDropPosition();
 	movement->approachBackwardFollowUntilSeparatingY();
 	movement->lineUpForTokenSeparatingY(); // go forward a bit
@@ -213,6 +214,7 @@ void setup() {
 	movement->approachFollowUntilPerpendicularLine();
 	movement->approachMoveIntoDropPosition();
 	depositToken();
+	depositToken();
 	movement->approachBackwardLeaveDropPosition();
 	movement->approachBackwardFollowUntilPerpendicularLine();
 	movement->positionForTurning();
@@ -222,6 +224,7 @@ void setup() {
 	movement->turnRight45();
 	movement->approachFollowUntilSeparatingY();
 	movement->approachMoveIntoDropPosition();
+	depositToken();
 	depositToken();
 	movement->approachBackwardLeaveDropPosition();
 	movement->approachBackwardFollowUntilSeparatingY();
@@ -235,6 +238,7 @@ void setup() {
 	movement->approachFollowUntilSeparatingY();
 	movement->approachMoveIntoDropPosition();
 	depositToken();
+	depositToken();
 	movement->approachBackwardLeaveDropPosition();
 	movement->approachBackwardFollowUntilSeparatingY();
 	movement->positionForTurning(); // go forward a bit
@@ -244,6 +248,7 @@ void setup() {
 	movement->turnRight90();
 	movement->approachFollowUntilPerpendicularLine();
 	movement->approachMoveIntoDropPosition();
+	depositToken();
 	depositToken();
 	movement->approachBackwardLeaveDropPosition();
 	movement->approachBackwardFollowUntilPerpendicularLine();
@@ -255,6 +260,10 @@ void setup() {
 	movement->approachFollowUntilSeparatingY();
 	movement->approachMoveIntoDropPosition();
 	depositToken();
+	depositToken();
+	depositGray();
+	depositGray();
+	depositGray();
 	movement->approachBackwardLeaveDropPosition();
 	movement->approachBackwardFollowUntilSeparatingY();
 	movement->positionForTurning();
@@ -373,6 +382,15 @@ void depositToken() {
 	arm.setEmOff();
 }
 
+void depositGray() {
+	//int color = colorBottom.getColor();
+	arm.moveArmToPosition(armOptions::Gray);
+	arm.moveArmDown();
+	arm.setEmOn();
+	arm.moveArmUp();
+	arm.moveArmToPosition(armOptions::Hole);
+	arm.setEmOff();
+}
 
 void initializePins() {
 	pinMode(EM_RELAY,OUTPUT);

@@ -216,7 +216,8 @@ void Movement::turnRight180() {
 
 void Movement::followLine() {
 	int position = line->getLinePosition(true);
-	float defaultSpeed = 1600;
+	//float defaultSpeed = 1600;
+	float defaultSpeed = 1100;
 	//float maxOffset = 800;
 	float offset = 0;
 	
@@ -231,7 +232,8 @@ void Movement::followLine() {
 
 void Movement::followLineBackwards() {
 	int position = line->getLinePosition(true);
-	float defaultSpeed = -1600;
+	//float defaultSpeed = -1600;
+	float defaultSpeed = -1100;
 	//float maxOffset = 800;
 	float offset = 0;
 	
